@@ -1,0 +1,11 @@
+Model Information:
+* title:	Low Poly Emergency Button
+* source:	https://sketchfab.com/3d-models/low-poly-emergency-button-d4e61a2f1afb447aa381b912c9a68a90
+* author:	ZeroCardinal (https://sketchfab.com/ZeroCardinal)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Low Poly Emergency Button" (https://sketchfab.com/3d-models/low-poly-emergency-button-d4e61a2f1afb447aa381b912c9a68a90) by ZeroCardinal (https://sketchfab.com/ZeroCardinal) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
