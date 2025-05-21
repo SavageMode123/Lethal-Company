@@ -10,4 +10,11 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	pass
+	for player in Players.get_children():
+		var camera: Camera3D = player.get_node("Camera")
+		var interactRay: RayCast3D = camera.get_node("InteractRay")
+		var collider: Object = interactRay.get_collider()
+
+		if collider:
+			print(collider)
+			
