@@ -1,0 +1,11 @@
+Model Information:
+* title:	Lethal Company Employee
+* source:	https://sketchfab.com/3d-models/lethal-company-employee-784517d62fea481fa18abe4fc1ddbc3d
+* author:	Ninjaaydan (https://sketchfab.com/Ninjaaydan1)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Lethal Company Employee" (https://sketchfab.com/3d-models/lethal-company-employee-784517d62fea481fa18abe4fc1ddbc3d) by Ninjaaydan (https://sketchfab.com/Ninjaaydan1) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

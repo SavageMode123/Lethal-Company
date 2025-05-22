@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://blude7e8oag3j" path="res://low_poly_emergency_button/textures/Material.002_baseColor.png" id="3_m1li0"]
 [ext_resource type="Texture2D" uid="uid://g8d5s6ylm30t" path="res://low_poly_emergency_button/textures/Material.002_metallicRoughness.png" id="4_ftsml"]
 [ext_resource type="Texture2D" uid="uid://bf7y3q5plpayd" path="res://low_poly_emergency_button/textures/Material.002_normal.png" id="5_4k8ko"]
+[ext_resource type="PackedScene" uid="uid://d3so6bj4yxu37" path="res://lethal_company_employee/scene.gltf" id="5_xn0y1"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_r5elr"]
 
@@ -16,29 +17,30 @@ material = SubResource("StandardMaterial3D_5yrqk")
 
 [sub_resource type="Animation" id="Animation_gqepx"]
 resource_name = "ElevatorDoorOpen"
+length = 2.0
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath(".:rotation")
+tracks/0/path = NodePath(".:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5),
+"times": PackedFloat32Array(0, 2),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector3(1.5708, 3.48787e-16, 3.48787e-16), Vector3(-0.523599, 3.48787e-16, 3.48787e-16)]
+"values": [Vector3(2.08165e-12, 4.45, -4.46), Vector3(2.08165e-12, 2.08165e-12, -4.46)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath(".:position")
+tracks/1/path = NodePath(".:scale")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.5),
+"times": PackedFloat32Array(0, 2),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector3(2.08165e-12, 4.45, -4.46), Vector3(2.08165e-12, -2.205, -8.33078)]
+"values": [Vector3(5.07462, 0.0489359, 8.94905), Vector3(5.075, 0.049, 2.08165e-12)]
 }
 
 [sub_resource type="Animation" id="Animation_sgvfi"]
@@ -46,26 +48,26 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath(".:rotation")
+tracks/0/path = NodePath(".:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(-1.5708, 6.97574e-16, 0)]
+"values": [Vector3(2.08165e-12, 4.45, -4.46)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath(".:position")
+tracks/1/path = NodePath(".:scale")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(2.08165e-12, 4.45, -4.46)]
+"values": [Vector3(5.07462, 0.0489359, 8.94905)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_4f6fs"]
@@ -190,9 +192,6 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_sfp50")
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_uaf3p"]
-viewport_path = NodePath("Elevator/OpenButton/SubViewport")
-
 [node name="Main" type="Node3D"]
 
 [node name="Elevator" type="Node3D" parent="." node_paths=PackedStringArray("Players")]
@@ -200,7 +199,7 @@ script = ExtResource("2_qana8")
 Players = NodePath("../Players")
 
 [node name="Floor" type="StaticBody3D" parent="Elevator"]
-transform = Transform3D(5.07462, 0, 0, 0, 0.0489359, 0, 0, 0, 8.94905, 0, 0, 0)
+transform = Transform3D(5.075, 0, 0, 0, 0.049, 0, 0, 0, 8.949, 2.08165e-12, 2.08165e-12, 2.08165e-12)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Elevator/Floor"]
 shape = SubResource("BoxShape3D_r5elr")
@@ -209,12 +208,13 @@ shape = SubResource("BoxShape3D_r5elr")
 mesh = SubResource("BoxMesh_wultg")
 
 [node name="Roof" type="StaticBody3D" parent="Elevator"]
-transform = Transform3D(5.07462, 0, 0, 0, 0.0489359, 0, 0, 0, 8.94905, 2.08165e-12, 8.9, 2.08165e-12)
+transform = Transform3D(5.075, 0, 0, 0, 0.049, 0, 0, 0, 8.949, 2.08165e-12, 8.9, 2.08165e-12)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Elevator/Roof"]
 shape = SubResource("BoxShape3D_r5elr")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Elevator/Roof/CollisionShape3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 mesh = SubResource("BoxMesh_wultg")
 
 [node name="Wall" type="StaticBody3D" parent="Elevator"]
@@ -227,13 +227,13 @@ shape = SubResource("BoxShape3D_r5elr")
 mesh = SubResource("BoxMesh_wultg")
 
 [node name="Door" type="StaticBody3D" parent="Elevator"]
-transform = Transform3D(5.07462, -3.41364e-17, -2.25982e-20, 0, -1.77147e-07, 8.94905, -3.53992e-15, -0.0489359, -3.23955e-05, 2.08165e-12, 4.45, -4.46)
+transform = Transform3D(5.07462, -2.23667e-28, 1.78791e-33, 0, -2.13906e-09, -8.94905, 2.31942e-26, 0.0489359, -3.91175e-07, 2.08165e-12, 4.45, -4.46)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Elevator/Door"]
 shape = SubResource("BoxShape3D_r5elr")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Elevator/Door/CollisionShape3D"]
-transform = Transform3D(1, 2.12393e-25, -2.20808e-30, 7.92088e-21, 1, 1.8181e-12, -3.1594e-31, 6.108e-18, 1, 0, 0, 0)
+transform = Transform3D(1, -7.92088e-21, 3.1594e-31, 7.92088e-21, 1, -6.07153e-18, -3.1594e-31, 6.07153e-18, 1, 0, 0, 0)
 mesh = SubResource("BoxMesh_wultg")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Elevator/Door"]
@@ -242,7 +242,7 @@ libraries = {
 }
 
 [node name="Wall3" type="StaticBody3D" parent="Elevator"]
-transform = Transform3D(-3.91173e-07, -0.0489359, -3.91175e-07, 0, -2.13906e-09, 8.94905, -8.949, 2.13906e-09, 1.70988e-14, 2.538, 4.45, 2.08165e-12)
+transform = Transform3D(-3.91173e-07, -0.049, -3.91173e-07, 0, -2.14186e-09, 8.949, -8.949, 2.14186e-09, 1.70987e-14, 2.538, 4.45, 2.08165e-12)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Elevator/Wall3"]
 shape = SubResource("BoxShape3D_r5elr")
@@ -251,7 +251,7 @@ shape = SubResource("BoxShape3D_r5elr")
 mesh = SubResource("BoxMesh_wultg")
 
 [node name="Wall4" type="StaticBody3D" parent="Elevator"]
-transform = Transform3D(-3.91173e-07, -0.0489359, -3.91175e-07, 0, -2.13906e-09, 8.94905, -8.949, 2.13906e-09, 1.70988e-14, -2.538, 4.45, 2.08165e-12)
+transform = Transform3D(-3.91173e-07, -0.049, -3.91173e-07, 0, -2.14186e-09, 8.949, -8.949, 2.14186e-09, 1.70987e-14, -2.538, 4.45, 2.08165e-12)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Elevator/Wall4"]
 shape = SubResource("BoxShape3D_r5elr")
@@ -289,23 +289,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 1.89817e-24, 0, 4.2543e-24, 1, 0.00862265
 mesh = SubResource("ArrayMesh_c608c")
 skeleton = NodePath("")
 
-[node name="SubViewport" type="SubViewport" parent="Elevator/OpenButton"]
-
-[node name="Label" type="Label" parent="Elevator/OpenButton/SubViewport"]
-offset_right = 51.0
-offset_bottom = 26.0
-text = "HELLO
-"
-
-[node name="Sprite3D" type="Sprite3D" parent="Elevator/OpenButton"]
-transform = Transform3D(1, 0, 0, 0, 1, 1.89817e-24, 0, 4.2543e-24, 1, 3.46876, 0, 0)
-texture = SubResource("ViewportTexture_uaf3p")
-
 [node name="Light" type="SpotLight3D" parent="."]
 transform = Transform3D(1, -6.97574e-16, -1.5246e-23, -1.5246e-23, -4.37114e-08, 1, -6.97574e-16, -1, -4.37114e-08, -0.0820077, 8.54226, 0.280514)
 light_energy = 3.667
 spot_range = 22.686
 spot_angle = 33.41
+
+[node name="scene" parent="Light" instance=ExtResource("5_xn0y1")]
 
 [node name="Light2" type="SpotLight3D" parent="."]
 transform = Transform3D(1, -6.97574e-16, -1.5246e-23, -1.5246e-23, -4.37114e-08, 1, -6.97574e-16, -1, -4.37114e-08, 2.8709, 5.16601, 0.280514)
@@ -331,3 +321,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.30365, 0)
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(-4.37114e-08, 3.48787e-16, 1, 3.48787e-16, 1, -3.48787e-16, -1, 3.48787e-16, -4.37114e-08, 1.89978, 1.07424, 0)
+
+[node name="scene" parent="." instance=ExtResource("5_xn0y1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.52881)
