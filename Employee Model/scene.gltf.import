@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://d3so6bj4yxu37"
-path="res://.godot/imported/scene.gltf-491dae2251b9d634a4b5c96484046f27.scn"
+uid="uid://b6px75mkmmf6b"
+path="res://.godot/imported/scene.gltf-cb2573e77ef31114e8cba00786f4849c.scn"
 
 [deps]
 
-source_file="res://lethal_company_employee/scene.gltf"
-dest_files=["res://.godot/imported/scene.gltf-491dae2251b9d634a4b5c96484046f27.scn"]
+source_file="res://Employee Model/scene.gltf"
+dest_files=["res://.godot/imported/scene.gltf-cb2573e77ef31114e8cba00786f4849c.scn"]
 
 [params]
 

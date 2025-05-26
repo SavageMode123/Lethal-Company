@@ -1,29 +1,42 @@
-[gd_scene load_steps=5 format=3 uid="uid://crs7ejl8sof8l"]
+[gd_scene load_steps=7 format=3 uid="uid://phecaduey8j4"]
 
 [ext_resource type="Script" path="res://Player.gd" id="1_5c3k4"]
+[ext_resource type="PackedScene" uid="uid://cdqsd28xl7td1" path="res://employee.tscn" id="3_pn4p7"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_nuarl"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_kh256"]
 
-[sub_resource type="LabelSettings" id="LabelSettings_fxxcx"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_ycu3w"]
+size = Vector3(1, 1.75, 0.75)
+
+[sub_resource type="LabelSettings" id="LabelSettings_7dlg2"]
 font_size = 35
 
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("camera")]
 script = ExtResource("1_5c3k4")
 camera = NodePath("Camera")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="CapsuleHitbox" type="CollisionShape3D" parent="."]
+visible = false
 shape = SubResource("CapsuleShape3D_nuarl")
+disabled = true
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="CollisionShape3D"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CapsuleHitbox"]
 mesh = SubResource("CapsuleMesh_kh256")
 
 [node name="Camera" type="Camera3D" parent="."]
-transform = Transform3D(2.39234, 0, 0, 0, 2.39234, 0, 0, 0, 2.39234, 0, 0.451875, 0)
+transform = Transform3D(2.39234, 0, 0, 0, 2.39234, 0, 0, 0, 2.39234, 2.08165e-12, 1.5, -0.25)
 
 [node name="InteractRay" type="RayCast3D" parent="Camera"]
-target_position = Vector3(2.08165e-12, 2.08165e-12, -5)
+target_position = Vector3(2.08165e-12, 2.08165e-12, -3)
+
+[node name="Employee Model" parent="." instance=ExtResource("3_pn4p7")]
+transform = Transform3D(0.818022, -0.159007, -6.95044e-09, -1.2705e-23, -3.64261e-08, 0.833333, -0.159007, -0.818022, -3.57569e-08, 0, 0, 0)
+
+[node name="Hitbox" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 0.875, 2.08165e-12)
+shape = SubResource("BoxShape3D_ycu3w")
 
 [node name="UI" type="Control" parent="."]
 layout_mode = 3
@@ -47,5 +60,5 @@ offset_right = 72.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "Press [E]"
-label_settings = SubResource("LabelSettings_fxxcx")
+label_settings = SubResource("LabelSettings_7dlg2")
 horizontal_alignment = 1

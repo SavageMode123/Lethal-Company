@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dmdjqly2nlpk2"
-path.etc2="res://.godot/imported/material_0_metallicRoughness.png-d44949f2bd605ce99ffd101329499e01.etc2.ctex"
+uid="uid://giiny47n40yn"
+path.etc2="res://.godot/imported/material_1_baseColor.png-ae1884b84a41dee2767a412d235d6d72.etc2.ctex"
 metadata={
 "imported_formats": ["etc2_astc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://lethal_company_employee/textures/material_0_metallicRoughness.png"
-dest_files=["res://.godot/imported/material_0_metallicRoughness.png-d44949f2bd605ce99ffd101329499e01.etc2.ctex"]
+source_file="res://Employee Model/textures/material_1_baseColor.png"
+dest_files=["res://.godot/imported/material_1_baseColor.png-ae1884b84a41dee2767a412d235d6d72.etc2.ctex"]
 
 [params]
 
