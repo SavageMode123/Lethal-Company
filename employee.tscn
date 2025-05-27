@@ -1,4 +1,4 @@
-[gd_scene load_steps=152 format=3 uid="uid://cdqsd28xl7td1"]
+[gd_scene load_steps=152 format=3 uid="uid://c05cdv073jpda"]
 
 [ext_resource type="Texture2D" uid="uid://cgbmyttv7i8wg" path="res://Employee Model/textures/material_0_baseColor.png" id="1_hujai"]
 [ext_resource type="Texture2D" uid="uid://coc14r76vdiu8" path="res://Employee Model/textures/material_0_metallicRoughness.png" id="2_ujbon"]
@@ -2118,6 +2118,58 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_boy1g")
 
+[sub_resource type="Animation" id="Animation_qenb8"]
+resource_name = "Idle"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Left Arm:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(1.39626, -1.5708, -1.5708), Vector3(1.39626, -1.5708, -1.74533), Vector3(1.39626, -1.5708, -1.5708)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Right Arm:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(1.39626, -1.5708, -1.5708), Vector3(1.39626, -1.5708, -1.39626), Vector3(1.39626, -1.5708, -1.5708)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Left Leg:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(1.39626, -1.5708, -1.5708), Vector3(1.39626, -1.5708, -1.5708)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Right Leg:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(1.39626, -1.5708, -1.5708), Vector3(1.39626, -1.5708, -1.5708)]
+}
+
 [sub_resource type="Animation" id="Animation_co880"]
 length = 0.001
 tracks/0/type = "value"
@@ -2219,58 +2271,6 @@ tracks/3/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 0,
 "values": [Vector3(1.39626, -1.5708, -1.5708), Vector3(0.827422, -2.9413, -2.8893), Vector3(1.39626, -1.5708, -1.5708), Vector3(0.785418, -0.185028, -0.240456), Vector3(1.39626, -1.5708, -1.5708)]
-}
-
-[sub_resource type="Animation" id="Animation_qenb8"]
-resource_name = "Idle"
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Left Arm:rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5, 1),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Vector3(1.39626, -1.5708, -1.5708), Vector3(1.39626, -1.5708, -1.74533), Vector3(1.39626, -1.5708, -1.5708)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Right Arm:rotation")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.5, 1),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Vector3(1.39626, -1.5708, -1.5708), Vector3(1.39626, -1.5708, -1.39626), Vector3(1.39626, -1.5708, -1.5708)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Left Leg:rotation")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 1),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector3(1.39626, -1.5708, -1.5708), Vector3(1.39626, -1.5708, -1.5708)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Right Leg:rotation")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0, 1),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector3(1.39626, -1.5708, -1.5708), Vector3(1.39626, -1.5708, -1.5708)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_nws5k"]
