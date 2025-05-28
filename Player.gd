@@ -24,8 +24,16 @@ var speed: float = 4.0
 @onready var animation_player: AnimationPlayer = $"Employee Model/AnimationPlayer"
 @onready var interactRay: RayCast3D = $"Camera/InteractRay"
 
+var interactablesNotIncludingScrap: Array = ["OpenButton"]
+
 func getInteracting() -> Object:
 	return interactRay.get_collider()
+
+func showInteractLabel():
+	$"UI/Interact".visible = true
+
+func hideInteractLabel():
+	$"UI/Interact".visible = false
 
 func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -41,7 +49,11 @@ func _process(_delta: float) -> void:
 	var interacting: Object = getInteracting()
 
 	if interacting and ScrapHandler.isScrap(interacting.name):
+		showInteractLabel()
 		interactingWithScrap = true
+	
+	elif not interacting or interacting.name not in interactablesNotIncludingScrap:
+		hideInteractLabel()
 	
 
 func _input(event):
