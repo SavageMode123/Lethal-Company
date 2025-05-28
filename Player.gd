@@ -1,33 +1,48 @@
 extends CharacterBody3D
 
 # Constants
-const JUMP_VELOCITY : float = 4.5
-const CROUCH_AMOUNT : float = 0.25
+const JUMP_VELOCITY: float = 4.5
+const CROUCH_AMOUNT: float = 0.25
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 # Player States
-var sprinting : bool = false
-var crouching : bool = false
+var sprinting: bool = false
+var crouching: bool = false
+var interactingWithScrap: bool = false
 
-var speed : float = 4.0
+var speed: float = 4.0
 
+@export_category("Utils")
+@export var ScrapHandler: Node3D
+
+@export_category("Objects")
 @export var camera: Camera3D
 @export var mouse_sensitivity: float = 0.005
 
-@onready var animation_player : AnimationPlayer = $"Employee Model/AnimationPlayer"
+@onready var animation_player: AnimationPlayer = $"Employee Model/AnimationPlayer"
+@onready var interactRay: RayCast3D = $"Camera/InteractRay"
+
+func getInteracting() -> Object:
+	return interactRay.get_collider()
 
 func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	camera.set_current(true)
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	# Checking if Player is Moving
 	if velocity != Vector3.ZERO:
 		animation_player.play("Walking")
 	else:
 		animation_player.play("Idle")
+	
+	var interacting: Object = getInteracting()
+
+	if interacting and ScrapHandler.isScrap(interacting.name):
+		interactingWithScrap = true
+	
 
 func _input(event):
 	# Escape Key
@@ -37,10 +52,9 @@ func _input(event):
 		elif Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 				Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
-	var tween : Tween = create_tween().set_parallel(true)
-
 	# Sprinting
 	if Input.is_action_just_pressed("Sprint"):
+		var tween: Tween = create_tween().set_parallel(true)
 		sprinting = true
 		speed *= 1.25
 
@@ -48,14 +62,16 @@ func _input(event):
 		tween.tween_property(camera, "fov", 90, 0.1)
 
 	elif Input.is_action_just_released("Sprint"):
+		var tween: Tween = create_tween().set_parallel(true)
 		sprinting = false
-		speed = 5
+		speed /= 1.25
 
 		tween.set_ease(Tween.EASE_IN_OUT)
 		tween.tween_property(camera, "fov", 75, 0.1)
 	
 	# Crouching
 	if Input.is_action_just_pressed("Crouch") and not crouching:
+		var tween: Tween = create_tween().set_parallel(true)
 		crouching = true
 		speed *= 0.75
 
@@ -65,6 +81,7 @@ func _input(event):
 		tween.tween_property(self, "scale", Vector3(scale.x, scale.y-CROUCH_AMOUNT, scale.z), 0.1)
 
 	elif Input.is_action_just_pressed("Crouch") and crouching:
+		var tween: Tween = create_tween().set_parallel(true)
 		crouching = false
 		speed = 5
 
@@ -72,6 +89,11 @@ func _input(event):
 		tween.set_trans(Tween.TRANS_SINE)
 		tween.tween_property(self, "position", Vector3(position.x, position.y+CROUCH_AMOUNT, position.z), 0.4)
 		tween.tween_property(self, "scale", Vector3(scale.x, scale.y+CROUCH_AMOUNT, scale.z), 0.1)
+	
+	# Interactions
+	if Input.is_action_just_pressed("Interact"):
+		if interactingWithScrap:
+			print("interacting with scrap")
 
 	# Moving Mouse Cursor
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
@@ -90,8 +112,8 @@ func _physics_process(delta: float) -> void:
 
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
-	var input_dir : Vector2 = Input.get_vector("Left", "Right", "Forward", "Back")
-	var direction : Vector3 = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	var input_dir: Vector2 = Input.get_vector("Left", "Right", "Forward", "Back")
+	var direction: Vector3 = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	
 	if direction:
 		velocity.x = direction.x * speed

@@ -26,7 +26,7 @@ disabled = true
 mesh = SubResource("CapsuleMesh_kh256")
 
 [node name="Camera" type="Camera3D" parent="."]
-transform = Transform3D(2.39234, 0, 0, 0, 2.39234, 0, 0, 0, 2.39234, 2.08165e-12, 1.5, -0.25)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000595093, 1.49957, -0.43353)
 
 [node name="InteractRay" type="RayCast3D" parent="Camera"]
 target_position = Vector3(2.08165e-12, 2.08165e-12, -3)
