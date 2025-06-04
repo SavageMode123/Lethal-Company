@@ -29,7 +29,7 @@ func _process(_delta: float) -> void:
 		var collider: Object = player.getInteracting()
 
 		if collider and collider.name == "OpenButton":
-			player.showInteractLabel()
+			# player.showInteractLabel()
 			canPressOpenButton = true
 		else:
 			# player.hideInteractLabel()

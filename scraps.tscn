@@ -54,7 +54,7 @@ shadow_mesh = SubResource("ArrayMesh_ewkyu")
 
 [node name="Scraps" type="Node3D"]
 
-[node name="LargeAxle" type="StaticBody3D" parent="."]
+[node name="LargeAxle" type="RigidBody3D" parent="."]
 
 [node name="Hitbox" type="CollisionShape3D" parent="LargeAxle"]
 transform = Transform3D(0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0)

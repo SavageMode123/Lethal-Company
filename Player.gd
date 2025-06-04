@@ -10,11 +10,11 @@ var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 # Player States
 var sprinting: bool = false
 var crouching: bool = false
-var interactingWithScrap: bool = false
 
 var speed: float = 4.0
 
 @export_category("Utils")
+@export var Main: Node3D
 @export var ScrapHandler: Node3D
 
 @export_category("Objects")
@@ -23,17 +23,28 @@ var speed: float = 4.0
 
 @onready var animation_player: AnimationPlayer = $"Employee Model/AnimationPlayer"
 @onready var interactRay: RayCast3D = $"Camera/InteractRay"
+@onready var inventory: Node3D = $"Inventory"
 
 var interactablesNotIncludingScrap: Array = ["OpenButton"]
-
-func getInteracting() -> Object:
-	return interactRay.get_collider()
+var objectInteractingWith: Object
 
 func showInteractLabel():
 	$"UI/Interact".visible = true
 
 func hideInteractLabel():
 	$"UI/Interact".visible = false
+
+func getInteracting() -> Object:
+	var interacting: Object = interactRay.get_collider()
+
+	if interacting:
+		if ScrapHandler.isScrap(interacting.name) or interacting.name in interactablesNotIncludingScrap:
+			showInteractLabel()
+			return interactRay.get_collider()
+
+	hideInteractLabel()
+	return null
+
 
 func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -47,16 +58,15 @@ func _process(_delta: float) -> void:
 		animation_player.play("Idle")
 	
 	var interacting: Object = getInteracting()
+	objectInteractingWith = interacting
 
-	if interacting and ScrapHandler.isScrap(interacting.name):
-		showInteractLabel()
-		interactingWithScrap = true
+	# if interacting and ScrapHandler.isScrap(interacting.name):
+	# 	objectInteractingWith = interacting
 	
-	elif not interacting or interacting.name not in interactablesNotIncludingScrap:
-		hideInteractLabel()
-	
+	# elif not interacting or interacting.name not in interactablesNotIncludingScrap:
+	# 	hideInteractLabel())
 
-func _input(event):
+func _input(event) -> void:
 	# Escape Key
 	if Input.is_action_just_pressed("ui_cancel"):
 		if Input.get_mouse_mode() == Input.MOUSE_MODE_VISIBLE:
@@ -104,9 +114,30 @@ func _input(event):
 	
 	# Interactions
 	if Input.is_action_just_pressed("Interact"):
-		if interactingWithScrap:
-			print("interacting with scrap")
+		if objectInteractingWith:
+			# Picking up scrap
+			if ScrapHandler.isScrap(objectInteractingWith.name):
+				Main.remove_child(objectInteractingWith)
+				# camera.add_child(objectInteractingWith)
+				inventory.addScrap(objectInteractingWith)
+				
+				objectInteractingWith.position = Vector3(0.5, -0.5, 0)
+				objectInteractingWith.freeze = true
+	
+	# Dropping scrap
+	if Input.is_action_just_pressed("Drop"):
+		var scrap: RigidBody3D = inventory.getScrap(inventory.equippedIndex)
+		
+		if scrap:
+			var scrapPosition: Vector3 = scrap.global_position
+			
+			camera.remove_child(scrap)
+			Main.add_child(scrap)
+			scrap.global_position = scrapPosition
+			scrap.freeze = false
 
+			inventory.removeScrap(inventory.equippedIndex)
+	
 	# Moving Mouse Cursor
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		rotate_y(-event.relative.x * mouse_sensitivity)

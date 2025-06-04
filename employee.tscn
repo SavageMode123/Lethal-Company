@@ -2785,7 +2785,7 @@ mesh = SubResource("ArrayMesh_ymvlt")
 skeleton = NodePath("")
 
 [node name="Left Arm" type="Node3D" parent="."]
-transform = Transform3D(0.984808, -5.49979e-08, -0.173652, -0.173652, -6.28617e-07, -0.984807, -5.49979e-08, 1, -6.28617e-07, -0.371464, 0.00216436, 1.38581)
+transform = Transform3D(0.984808, -5.49978e-08, -0.173651, -0.173652, -6.28617e-07, -0.984807, -5.49979e-08, 1, -6.28617e-07, -0.371464, 0.00216436, 1.38581)
 
 [node name="outline2_67" type="Node3D" parent="Left Arm"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3125, -1.375, 0)
@@ -2806,7 +2806,7 @@ mesh = SubResource("ArrayMesh_bgqwp")
 skeleton = NodePath("")
 
 [node name="Right Arm" type="Node3D" parent="."]
-transform = Transform3D(0.984807, -5.49978e-08, -0.173651, -0.173652, -6.28616e-07, -0.984807, -5.49978e-08, 0.999999, -6.28617e-07, 0.31014, -0.0356794, 1.35738)
+transform = Transform3D(0.984807, -5.49978e-08, -0.173651, -0.173651, -6.28616e-07, -0.984807, -5.49978e-08, 0.999999, -6.28617e-07, 0.31014, -0.0356794, 1.35738)
 
 [node name="outline3_71" type="Node3D" parent="Right Arm"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3125, -1.375, 0)
