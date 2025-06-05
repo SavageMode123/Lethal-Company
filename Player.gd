@@ -35,12 +35,20 @@ func hideInteractLabel():
 	$"UI/Interact".visible = false
 
 func getInteracting() -> Object:
+	for scrap in inventory.get_children():
+		interactRay.add_exception(scrap)
+	
+	for scrap in camera.get_node("Viewmodel").get_children():
+		interactRay.add_exception(scrap)
+		
 	var interacting: Object = interactRay.get_collider()
+	interactRay.clear_exceptions()
 
 	if interacting:
-		if ScrapHandler.isScrap(interacting.name) or interacting.name in interactablesNotIncludingScrap:
+		print(interacting)
+		if interacting.has_meta("scrap") or interacting.name in interactablesNotIncludingScrap:
 			showInteractLabel()
-			return interactRay.get_collider()
+			return interacting
 
 	hideInteractLabel()
 	return null
@@ -116,7 +124,8 @@ func _input(event) -> void:
 	if Input.is_action_just_pressed("Interact"):
 		if objectInteractingWith:
 			# Picking up scrap
-			if ScrapHandler.isScrap(objectInteractingWith.name):
+			if objectInteractingWith.has_meta("scrap"):
+				print(objectInteractingWith.name)
 				Main.remove_child(objectInteractingWith)
 				# camera.add_child(objectInteractingWith)
 				inventory.addScrap(objectInteractingWith)
@@ -131,12 +140,13 @@ func _input(event) -> void:
 		if scrap:
 			var scrapPosition: Vector3 = scrap.global_position
 			
-			camera.remove_child(scrap)
-			Main.add_child(scrap)
-			scrap.global_position = scrapPosition
-			scrap.freeze = false
+			# camera.remove_child(scrap)
 
 			inventory.removeScrap(inventory.equippedIndex)
+			Main.add_child(scrap)
+			scrap.visible = true
+			scrap.global_position = scrapPosition
+			scrap.freeze = false
 	
 	# Moving Mouse Cursor
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:

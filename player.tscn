@@ -142,6 +142,7 @@ grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_k4a7g")
 
 [node name="Inventory" type="Node3D" parent="." node_paths=PackedStringArray("UI", "viewmodel")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0554035, 1.00791, 0.0602795)
 script = ExtResource("2_o1u1a")
 UI = NodePath("../UI")
 viewmodel = NodePath("../Camera/Viewmodel")

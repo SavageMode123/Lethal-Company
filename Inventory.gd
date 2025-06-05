@@ -15,24 +15,34 @@ func getScrap(index: int):
 func addScrap(scrap: RigidBody3D):
 	if len(availableIndexes) > 0:
 		var availableIndex: int = availableIndexes[0]
+		print(availableIndex)
 		inventory[availableIndex] = scrap
 		availableIndexes.remove_at(0)
 
 		add_child(scrap)
+		var scrapDuplicate: RigidBody3D = scrap.duplicate()
+		scrap.freeze = true
+		scrap.visible = false
 		inventoryUI.get_node(str(availableIndex)).get_node("Image").visible = true
 
-		var scrapDuplicate: RigidBody3D = scrap.duplicate()
 		viewmodel.add_child(scrapDuplicate)
 		scrapDuplicate.position = Vector3(0.5, -0.5, 0)
 		scrapDuplicate.freeze = true
 
 func removeScrap(index: int):
 	if index < len(inventory):
-		inventory[index] = null
-		availableIndexes.append(index)
-		availableIndexes.sort()
-		
-		inventoryUI.get_node(str(index)).get_node("Image").visible = false
+		var scrap: RigidBody3D = getScrap(index)
+		if scrap != null:
+			inventory[index] = null
+			availableIndexes.append(index)
+			availableIndexes.sort()
+			
+			inventoryUI.get_node(str(index)).get_node("Image").visible = false
+			
+			for part in viewmodel.get_children():
+				part.queue_free()
+
+			remove_child(scrap)
 
 func _process(_delta: float) -> void:
 	var equippedInventorySlotUI: Panel = inventoryUI.get_node(str(equippedIndex))
@@ -43,7 +53,7 @@ func _process(_delta: float) -> void:
 		if slotUI == equippedInventorySlotUI:
 			continue
 		
-		sizeTween.tween_property(equippedInventorySlotUI, "scale", Vector2(1, 1), 0.1)
+		sizeTween.tween_property(equippedInventorySlotUI, "scale", Vector2(1, 1), 0.1) 
 
 func _input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("CycleInventoryRight"):
