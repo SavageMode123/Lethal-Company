@@ -84,7 +84,7 @@ func _input(event) -> void:
 
 	# Sprinting
 	if Input.is_action_just_pressed("Sprint"):
-		var tween: Tween = create_tween().set_parallel(true)
+		var tween : Tween = create_tween().set_parallel(true)
 		sprinting = true
 		speed *= 1.25
 
@@ -92,7 +92,7 @@ func _input(event) -> void:
 		tween.tween_property(camera, "fov", 90, 0.1)
 
 	elif Input.is_action_just_released("Sprint"):
-		var tween: Tween = create_tween().set_parallel(true)
+		var tween : Tween = create_tween().set_parallel(true)
 		sprinting = false
 		speed /= 1.25
 
@@ -101,7 +101,7 @@ func _input(event) -> void:
 	
 	# Crouching
 	if Input.is_action_just_pressed("Crouch") and not crouching:
-		var tween: Tween = create_tween().set_parallel(true)
+		var tween : Tween = create_tween().set_parallel(true)
 		crouching = true
 		speed *= 0.75
 
@@ -111,7 +111,7 @@ func _input(event) -> void:
 		tween.tween_property(self, "scale", Vector3(scale.x, scale.y-CROUCH_AMOUNT, scale.z), 0.1)
 
 	elif Input.is_action_just_pressed("Crouch") and crouching:
-		var tween: Tween = create_tween().set_parallel(true)
+		var tween : Tween = create_tween().set_parallel(true)
 		crouching = false
 		speed = 5
 

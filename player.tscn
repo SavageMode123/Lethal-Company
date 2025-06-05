@@ -1,4 +1,5 @@
 [gd_scene load_steps=11 format=3 uid="uid://dwl20mfyhkdyq"]
+[gd_scene load_steps=5 format=3 uid="uid://phecaduey8j4"]
 
 [ext_resource type="Script" path="res://Player.gd" id="1_5c3k4"]
 [ext_resource type="Texture2D" uid="uid://87scjay620ri" path="res://gearwhite.png" id="2_mdtw5"]
@@ -23,11 +24,25 @@ texture = ExtResource("2_mdtw5")
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_kh256"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ycu3w"]
-size = Vector3(1, 1.75, 0.75)
+size = Vector3(0.8, 1.75, 0.75)
 
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("camera")]
 script = ExtResource("1_5c3k4")
 camera = NodePath("Camera")
+
+[node name="Camera" type="Camera3D" parent="."]
+transform = Transform3D(2.39234, 0, 0, 0, 2.39234, 0, 0, 0, 2.39234, 2.08165e-12, 1.5, -0.25)
+current = true
+
+[node name="InteractRay" type="RayCast3D" parent="Camera"]
+target_position = Vector3(2.08165e-12, 2.08165e-12, -3)
+
+[node name="Employee Model" parent="." instance=ExtResource("3_pn4p7")]
+transform = Transform3D(0.818022, -0.159007, -6.95044e-09, -1.2705e-23, -3.64261e-08, 0.833333, -0.159007, -0.818022, -3.57569e-08, 0, 0, 0)
+
+[node name="Hitbox" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 0.875, 2.08165e-12)
+shape = SubResource("BoxShape3D_ycu3w")
 
 [node name="UI" type="Control" parent="."]
 layout_mode = 3
