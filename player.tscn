@@ -1,6 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://phecaduey8j4"]
+[gd_scene load_steps=9 format=3 uid="uid://dwl20mfyhkdyq"]
 
 [ext_resource type="Script" path="res://Player.gd" id="1_5c3k4"]
+[ext_resource type="Texture2D" uid="uid://87scjay620ri" path="res://gearwhite.png" id="2_mdtw5"]
+[ext_resource type="Script" path="res://Inventory.gd" id="2_o1u1a"]
 [ext_resource type="PackedScene" uid="uid://c05cdv073jpda" path="res://employee.tscn" id="3_pn4p7"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ycu3w"]
@@ -8,6 +10,16 @@ size = Vector3(0.8, 1.75, 0.75)
 
 [sub_resource type="LabelSettings" id="LabelSettings_7dlg2"]
 font_size = 35
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x1cn4"]
+bg_color = Color(0.14902, 0.14902, 0.14902, 0.647059)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_k4a7g"]
+texture = ExtResource("2_mdtw5")
 
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("camera")]
 script = ExtResource("1_5c3k4")
@@ -18,7 +30,10 @@ transform = Transform3D(2.39234, 0, 0, 0, 2.39234, 0, 0, 0, 2.39234, 2.08165e-12
 current = true
 
 [node name="InteractRay" type="RayCast3D" parent="Camera"]
-target_position = Vector3(2.08165e-12, 2.08165e-12, -3)
+target_position = Vector3(2.08165e-12, 2.08165e-12, -1)
+collision_mask = 3
+
+[node name="Viewmodel" type="Node3D" parent="Camera"]
 
 [node name="Employee Model" parent="." instance=ExtResource("3_pn4p7")]
 transform = Transform3D(0.818022, -0.159007, -6.95044e-09, -1.2705e-23, -3.64261e-08, 0.833333, -0.159007, -0.818022, -3.57569e-08, 0, 0, 0)
@@ -51,3 +66,96 @@ grow_vertical = 0
 text = "Press [E]"
 label_settings = SubResource("LabelSettings_7dlg2")
 horizontal_alignment = 1
+
+[node name="Inventory" type="HBoxContainer" parent="UI"]
+layout_mode = 2
+offset_left = 376.0
+offset_top = 528.0
+offset_right = 776.0
+offset_bottom = 608.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="0" type="Panel" parent="UI/Inventory"]
+custom_minimum_size = Vector2(80, 2.08165e-12)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_x1cn4")
+
+[node name="Image" type="Panel" parent="UI/Inventory/0"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 4.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_k4a7g")
+
+[node name="1" type="Panel" parent="UI/Inventory"]
+custom_minimum_size = Vector2(80, 2.08165e-12)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_x1cn4")
+
+[node name="Image" type="Panel" parent="UI/Inventory/1"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 4.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_k4a7g")
+
+[node name="2" type="Panel" parent="UI/Inventory"]
+custom_minimum_size = Vector2(80, 2.08165e-12)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_x1cn4")
+
+[node name="Image" type="Panel" parent="UI/Inventory/2"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 4.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_k4a7g")
+
+[node name="3" type="Panel" parent="UI/Inventory"]
+custom_minimum_size = Vector2(80, 2.08165e-12)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_x1cn4")
+
+[node name="Image" type="Panel" parent="UI/Inventory/3"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 4.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_k4a7g")
+
+[node name="Inventory" type="Node3D" parent="." node_paths=PackedStringArray("UI", "viewmodel")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0554035, 1.00791, 0.0602795)
+script = ExtResource("2_o1u1a")
+UI = NodePath("../UI")
+viewmodel = NodePath("../Camera/Viewmodel")

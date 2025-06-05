@@ -26,16 +26,11 @@ func _input(_event: InputEvent) -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
 	for player in Players.get_children():
-		var camera: Camera3D = player.get_node("Camera")
-		var interactRay: RayCast3D = camera.get_node("InteractRay")
-		var collider: Object = interactRay.get_collider()
-		
-		var playerUI: Control = player.get_node("UI")
-		var interactLabel: Label = playerUI.get_node("Interact")
+		var collider: Object = player.getInteracting()
 
 		if collider and collider.name == "OpenButton":
-			interactLabel.visible = true
+			# player.showInteractLabel()
 			canPressOpenButton = true
 		else:
-			interactLabel.visible = false
+			# player.hideInteractLabel()
 			canPressOpenButton = false
