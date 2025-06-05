@@ -8,7 +8,7 @@ var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	generateMap(Vector3i(0, 0, 0))
+	generateMap(Vector3i(0, 7, 0))
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -19,9 +19,10 @@ func generateMap(origin_chunk: Vector3i) -> void:
 	var chunk_pos: Array = [origin_chunk]
 	var cur_pos: Vector3i = origin_chunk
 	var cur_dir: Vector3i = Vector3i.FORWARD
+	var last_dir: Vector3i = Vector3i.FORWARD
 
 	for i in range(100):
-		var directions: Array[Vector3i] = [Vector3i.FORWARD, Vector3i.BACK, Vector3i.LEFT, Vector3i.RIGHT]
+		var directions: Array[Vector3i] = [Vector3i.FORWARD, Vector3i.BACK, Vector3i.LEFT, Vector3i.RIGHT, last_dir]
 		directions.shuffle()
 		cur_dir = directions.pop_front()
 
@@ -29,6 +30,7 @@ func generateMap(origin_chunk: Vector3i) -> void:
 			continue
 
 		cur_pos += cur_dir
+		last_dir = cur_dir
 		chunk_pos.append(cur_pos)
 	
 	for index in range(len(chunk_pos)):

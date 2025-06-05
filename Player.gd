@@ -20,7 +20,7 @@ var speed : float = 4.0
 
 func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	# camera.set_current(true)
+	camera.set_current(true)
 
 func _process(delta: float) -> void:
 	# Checking if Player is Moving

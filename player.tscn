@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://c05cdv073jpda" path="res://employee.tscn" id="3_pn4p7"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ycu3w"]
-size = Vector3(1, 1.75, 0.75)
+size = Vector3(0.8, 1.75, 0.75)
 
 [sub_resource type="LabelSettings" id="LabelSettings_7dlg2"]
 font_size = 35
@@ -15,6 +15,7 @@ camera = NodePath("Camera")
 
 [node name="Camera" type="Camera3D" parent="."]
 transform = Transform3D(2.39234, 0, 0, 0, 2.39234, 0, 0, 0, 2.39234, 2.08165e-12, 1.5, -0.25)
+current = true
 
 [node name="InteractRay" type="RayCast3D" parent="Camera"]
 target_position = Vector3(2.08165e-12, 2.08165e-12, -3)
