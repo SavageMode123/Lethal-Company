@@ -1,10 +1,12 @@
-[gd_scene load_steps=11 format=3 uid="uid://dwl20mfyhkdyq"]
-[gd_scene load_steps=5 format=3 uid="uid://phecaduey8j4"]
+[gd_scene load_steps=9 format=3 uid="uid://dwl20mfyhkdyq"]
 
 [ext_resource type="Script" path="res://Player.gd" id="1_5c3k4"]
 [ext_resource type="Texture2D" uid="uid://87scjay620ri" path="res://gearwhite.png" id="2_mdtw5"]
 [ext_resource type="Script" path="res://Inventory.gd" id="2_o1u1a"]
 [ext_resource type="PackedScene" uid="uid://c05cdv073jpda" path="res://employee.tscn" id="3_pn4p7"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ycu3w"]
+size = Vector3(0.8, 1.75, 0.75)
 
 [sub_resource type="LabelSettings" id="LabelSettings_7dlg2"]
 font_size = 35
@@ -19,13 +21,6 @@ corner_radius_bottom_left = 10
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_k4a7g"]
 texture = ExtResource("2_mdtw5")
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_nuarl"]
-
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_kh256"]
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_ycu3w"]
-size = Vector3(0.8, 1.75, 0.75)
-
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("camera")]
 script = ExtResource("1_5c3k4")
 camera = NodePath("Camera")
@@ -35,7 +30,10 @@ transform = Transform3D(2.39234, 0, 0, 0, 2.39234, 0, 0, 0, 2.39234, 2.08165e-12
 current = true
 
 [node name="InteractRay" type="RayCast3D" parent="Camera"]
-target_position = Vector3(2.08165e-12, 2.08165e-12, -3)
+target_position = Vector3(2.08165e-12, 2.08165e-12, -1)
+collision_mask = 3
+
+[node name="Viewmodel" type="Node3D" parent="Camera"]
 
 [node name="Employee Model" parent="." instance=ExtResource("3_pn4p7")]
 transform = Transform3D(0.818022, -0.159007, -6.95044e-09, -1.2705e-23, -3.64261e-08, 0.833333, -0.159007, -0.818022, -3.57569e-08, 0, 0, 0)
@@ -161,27 +159,3 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0554035, 1.00791, 0.060279
 script = ExtResource("2_o1u1a")
 UI = NodePath("../UI")
 viewmodel = NodePath("../Camera/Viewmodel")
-
-[node name="CapsuleHitbox" type="CollisionShape3D" parent="."]
-visible = false
-shape = SubResource("CapsuleShape3D_nuarl")
-disabled = true
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="CapsuleHitbox"]
-mesh = SubResource("CapsuleMesh_kh256")
-
-[node name="Camera" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1.5, -0.434)
-
-[node name="InteractRay" type="RayCast3D" parent="Camera"]
-target_position = Vector3(2.08165e-12, 2.08165e-12, -1)
-collision_mask = 3
-
-[node name="Viewmodel" type="Node3D" parent="Camera"]
-
-[node name="Employee Model" parent="." instance=ExtResource("3_pn4p7")]
-transform = Transform3D(0.818022, -0.159007, -6.95044e-09, -1.2705e-23, -3.64261e-08, 0.833333, -0.159007, -0.818022, -3.57569e-08, 0, 0, 0)
-
-[node name="Hitbox" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 0.875, 2.08165e-12)
-shape = SubResource("BoxShape3D_ycu3w")
