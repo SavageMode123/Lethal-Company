@@ -8,36 +8,58 @@ var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	generateMap(Vector3i(0, 7, 0))
+	generateMap(Vector3i(0, 0, 0))
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
 	pass
 
-func generateMap(origin_chunk: Vector3i) -> void:
-	var chunk_pos: Array = [origin_chunk]
+
+func room_spawning(origin_chunk: Vector3i) -> Array[Vector3]:
+	var room: Node3D = Rooms.get_node("V1").duplicate()
+	room.position = origin_chunk
+	var rooms: Array[Node3D] = [room]
+	var chunk_pos: Array[Vector3] = []
+
+	# for i in range(rng.randi_range(2, 5)):
+	for i in range(-5, 5):
+		var rand_connector: Node3D = rooms[-1].get_node("Connectors").get_node("Connector"+str(rng.randi_range(1, 4)))
+		var rand_pos : Vector3 = Vector3(rand_connector.position.x + (rng.randi_range(-10, 10)*i), rand_connector.position.y, rand_connector.position.z + (rng.randi_range(-10, 10)*i))
+		
+		var object: Node3D = room.duplicate()
+		object.position = rand_pos
+		Root.call_deferred("add_child", object)
+
+	return chunk_pos
+
+func hallway_spawning(origin_chunk: Vector3i) -> Array[Vector3i]:
+	var chunk_pos: Array[Vector3i] = [origin_chunk]
 	var cur_pos: Vector3i = origin_chunk
 	var cur_dir: Vector3i = Vector3i.FORWARD
 	var last_dir: Vector3i = Vector3i.FORWARD
-
-	for i in range(100):
+	
+	# Getting Chunk Positions
+	for i in range(1000):
 		var directions: Array[Vector3i] = [Vector3i.FORWARD, Vector3i.BACK, Vector3i.LEFT, Vector3i.RIGHT, last_dir]
 		directions.shuffle()
 		cur_dir = directions.pop_front()
 
-		if cur_pos + cur_dir in chunk_pos:
+		if (cur_pos + cur_dir) *4 in chunk_pos:
 			continue
 
 		cur_pos += cur_dir
 		last_dir = cur_dir
-		chunk_pos.append(cur_pos)
+		chunk_pos.append(cur_pos*4)
 	
+
+	# Spawning Chunks
 	for index in range(len(chunk_pos)):
 		var object: Node3D = Hallways.get_node("V2").duplicate()
 		object.position = chunk_pos[index]
 		Root.call_deferred("add_child", object)
 
+		# Deleting Walls Based on Previous and Next Hallway Position
 		if index != 0:
 			var prev_pos: Vector3i = chunk_pos[index-1]
 			var dir: Vector3 = Vector3(prev_pos.x, prev_pos.y, prev_pos.z).direction_to(chunk_pos[index])
@@ -50,12 +72,6 @@ func generateMap(origin_chunk: Vector3i) -> void:
 				object.get_node("Wall2").call_deferred("queue_free")
 			elif dir == Vector3.RIGHT:
 				object.get_node("Wall3").call_deferred("queue_free")
-
-			print(dir)
-			# var result: Dictionary = send_raycast(prev_pos, chunk_pos[index])
-			# if result != {}:
-			# 	print(result.collider)
-			# 	result.collider.queue_free()
 		
 
 		if index + 1 != len(chunk_pos):
@@ -71,12 +87,11 @@ func generateMap(origin_chunk: Vector3i) -> void:
 			elif dir == Vector3.LEFT:
 				object.get_node("Wall2").call_deferred("queue_free")
 
-			print(dir)
-			# var result: Dictionary = send_raycast(chunk_pos[index], next_pos)
-			# if result != {}:
-			# 	print(result.collider)
-			# 	result.collider.queue_free()
-		# print(object.position)
+	return chunk_pos
+
+func generateMap(origin_chunk: Vector3i) -> void:
+	var _chunk_pos: Array = hallway_spawning(origin_chunk)
+	# room_spawning(origin_chunk)
 
 func send_raycast(from: Vector3i, to: Vector3i) -> Dictionary:
 	var space_state: PhysicsDirectSpaceState3D = get_world_3d().direct_space_state
