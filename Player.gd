@@ -45,7 +45,6 @@ func getInteracting() -> Object:
 	interactRay.clear_exceptions()
 
 	if interacting:
-		print(interacting)
 		if interacting.has_meta("scrap") or interacting.name in interactablesNotIncludingScrap:
 			showInteractLabel()
 			return interacting

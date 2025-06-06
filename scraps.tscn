@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://mpnbf4vfalmu"]
+[gd_scene load_steps=8 format=3 uid="uid://dndc0gx2p7oh2"]
 
 [ext_resource type="Texture2D" uid="uid://clr5lsqfo2fho" path="res://large_axle/textures/standardSurface1_baseColor.png" id="1_nveet"]
 [ext_resource type="Texture2D" uid="uid://do38knf86nymx" path="res://large_axle/textures/standardSurface1_metallicRoughness.png" id="2_h4ogp"]
