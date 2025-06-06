@@ -114,8 +114,8 @@ func _input(event) -> void:
 					# camera.add_child(objectInteractingWith)
 					inventory.addScrap(objectInteractingWith)
 					
-					objectInteractingWith.position = Vector3(0.5, -0.5, 0)
-					objectInteractingWith.freeze = true
+					
+					# objectInteractingWith.freeze = true
 	
 	# Dropping scrap
 	if Input.is_action_just_pressed("Drop"):

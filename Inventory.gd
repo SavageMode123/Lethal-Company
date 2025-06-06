@@ -25,6 +25,7 @@ func addScrap(scrap: RigidBody3D):
 		add_child(scrap)
 
 		scrap.get_node("Hitbox").disabled = true
+		scrap.position = Vector3(0.5, -0.5, 0) # TODO figure out scrap position for accurate dropping                             
 		scrap.freeze = true
 		scrap.visible = false
 
@@ -69,7 +70,11 @@ func _process(_delta: float) -> void:
 		viewmodel.add_child(scrapDuplicate)
 		scrapDuplicate.visible = true
 		scrapDuplicate.get_node("Hitbox").disabled = true
-		scrapDuplicate.position = Vector3(0.5, -0.5, 0)
+		
+		scrapDuplicate.position = scrapDuplicate.get_meta("PositionOffset")
+		scrapDuplicate.rotation = scrapDuplicate.get_meta("RotationOffset")
+
+		# scrapDuplicate.position = Vector3(0.5, -0.5, 0)
 		scrapDuplicate.freeze = true
 
 
