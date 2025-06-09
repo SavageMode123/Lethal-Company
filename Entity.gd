@@ -1,0 +1,65 @@
+extends CharacterBody3D
+
+const SPEED: float = 5.0
+const JUMP_VELOCITY: float = 4.5
+
+# Bot States
+var player_on_screen: bool = false
+
+# Get the gravity from the project settings to be synced with RigidBody nodes.
+var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
+var rng: RandomNumberGenerator = RandomNumberGenerator.new()
+var path_finding_index = 0
+
+var rotate_timer = 60
+var prev_rotation = -3
+
+@export var nav: NavigationAgent3D
+@export var direction_ray: RayCast3D
+
+func _ready() -> void:
+	direction_ray.add_exception(self)
+	rand_rotation()
+
+func _physics_process(delta: float) -> void:
+	# Add the gravity.
+	if not is_on_floor():
+		velocity.y -= gravity * delta
+
+	# Movement
+	rotate_timer -= 1
+	
+	if player_on_screen:
+		pass
+		# nav.target_position = player_visible_event.global_position
+	else:
+		var collider: Object = direction_ray.get_collider()
+		if collider: 
+			nav.target_position = collider.global_position
+		elif rotate_timer < 0:
+			rand_rotation()
+
+	var direction : Vector3 = (nav.get_next_path_position() - global_position).normalized()
+	velocity = Vector3((direction * SPEED).x, velocity.y, (direction * SPEED).z)
+
+	if (abs(velocity.x) < 0.1 or abs(velocity.z) < 0.1) and rotate_timer < 0:
+		rand_rotation()
+
+	move_and_slide()
+
+func rand_rotation() -> void:
+	var rotations = [-3, 3, -prev_rotation]
+	rotations.shuffle()
+	prev_rotation = rotations[0]
+
+	var tween : Tween = create_tween().set_parallel(true)
+	tween.tween_property(self, "rotation", Vector3(rotation.x, rotation.y+prev_rotation, rotation.z), 1)
+	rotate_timer = 120
+
+func send_raycast(from: Vector3i, to: Vector3i) -> Dictionary:
+	var space_state: PhysicsDirectSpaceState3D = get_world_3d().direct_space_state
+	var query: PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(from, to)
+	query.collide_with_areas = true
+
+	var result: Dictionary = space_state.intersect_ray(query)
+	return result
