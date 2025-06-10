@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://phecaduey8j4"]
+[gd_scene load_steps=9 format=3 uid="uid://dwl20mfyhkdyq"]
 
 [ext_resource type="Script" path="res://Player.gd" id="1_5c3k4"]
 [ext_resource type="Texture2D" uid="uid://87scjay620ri" path="res://gearwhite.png" id="2_mdtw5"]
@@ -27,7 +27,6 @@ camera = NodePath("Camera")
 
 [node name="Camera" type="Camera3D" parent="."]
 transform = Transform3D(2.39234, 0, 0, 0, 2.39234, 0, 0, 0, 2.39234, 2.08165e-12, 1.5, -0.5)
-current = true
 
 [node name="InteractRay" type="RayCast3D" parent="Camera"]
 target_position = Vector3(2.08165e-12, 2.08165e-12, -1)

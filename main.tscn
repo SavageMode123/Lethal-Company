@@ -1,11 +1,12 @@
-[gd_scene load_steps=55 format=3 uid="uid://cmcut6gpk4u04"]
+[gd_scene load_steps=56 format=3 uid="uid://cmcut6gpk4u04"]
 
-[ext_resource type="PackedScene" uid="uid://phecaduey8j4" path="res://player.tscn" id="1_h55wo"]
+[ext_resource type="PackedScene" uid="uid://dwl20mfyhkdyq" path="res://player.tscn" id="1_h55wo"]
 [ext_resource type="Script" path="res://Elevator.gd" id="2_qana8"]
 [ext_resource type="Texture2D" uid="uid://blude7e8oag3j" path="res://low_poly_emergency_button/textures/Material.002_baseColor.png" id="3_m1li0"]
 [ext_resource type="Texture2D" uid="uid://g8d5s6ylm30t" path="res://low_poly_emergency_button/textures/Material.002_metallicRoughness.png" id="4_ftsml"]
 [ext_resource type="Texture2D" uid="uid://bf7y3q5plpayd" path="res://low_poly_emergency_button/textures/Material.002_normal.png" id="5_4k8ko"]
 [ext_resource type="Script" path="res://ProceduralGenerator.gd" id="6_x11xo"]
+[ext_resource type="Script" path="res://Freecam.gd" id="7_dvrum"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_p50nl"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -313,7 +314,7 @@ ScrapHandler = NodePath("../../Modules/ScrapHandler")
 mouse_sensitivity = 0.003
 
 [node name="Elevator" type="Node3D" parent="." node_paths=PackedStringArray("Players")]
-transform = Transform3D(-1, 3.48787e-16, -8.74228e-08, 3.48787e-16, 1, -3.48787e-16, 8.74228e-08, -3.48787e-16, -1, 2.08165e-12, 2.08165e-12, 2.08165e-12)
+transform = Transform3D(-1, 3.48787e-16, -8.74228e-08, 3.48787e-16, 1, -3.48787e-16, 8.74228e-08, -3.48787e-16, -1, 0, 0, 0)
 script = ExtResource("2_qana8")
 Players = NodePath("../Players")
 
@@ -333,6 +334,7 @@ collision_layer = 3
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Elevator/Roof"]
 shape = SubResource("BoxShape3D_r5elr")
+disabled = true
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Elevator/Roof/CollisionShape3D"]
 mesh = SubResource("BoxMesh_wultg")
@@ -348,7 +350,7 @@ shape = SubResource("BoxShape3D_r5elr")
 mesh = SubResource("BoxMesh_wultg")
 
 [node name="Door" type="StaticBody3D" parent="Elevator"]
-transform = Transform3D(5.07462, -2.23668e-28, 1.78792e-33, 0, -2.13906e-09, -8.94905, 2.31942e-26, 0.0489359, -3.91175e-07, 2.08165e-12, 4.45, -4.46)
+transform = Transform3D(5.07462, 0, 0, 0, -2.13906e-09, -8.94905, 0, 0.0489359, -3.91175e-07, 2.08165e-12, 4.45, -4.46)
 collision_layer = 3
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Elevator/Door"]
@@ -601,7 +603,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.08165e-12, -2)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 100, 2.08165e-12)
 
 [node name="V2" type="Node3D" parent="Hallways"]
-transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 10.5604, 2.08165e-12, 10.4317)
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 128, -96, 12)
 
 [node name="Floor" type="StaticBody3D" parent="Hallways/V2"]
 
@@ -671,5 +673,9 @@ mesh = SubResource("BoxMesh_dy5gb")
 skeleton = NodePath("../../..")
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, -6.97574e-16, -1.5246e-23, -1.5246e-23, -4.37114e-08, 1, -6.97574e-16, -1, -4.37114e-08, 2.08165e-12, 10, 2.08165e-12)
+transform = Transform3D(1, -6.97574e-16, -1.52459e-23, -1.5246e-23, -4.37114e-08, 1, -6.97574e-16, -1, -4.37114e-08, 2.08165e-12, 21.5778, 2.08165e-12)
 visible = false
+
+[node name="Freecam" type="Camera3D" parent="."]
+current = true
+script = ExtResource("7_dvrum")
