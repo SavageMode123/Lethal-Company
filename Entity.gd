@@ -37,17 +37,19 @@ func _physics_process(delta: float) -> void:
 		else:
 			await get_tree().create_timer(1.0).timeout
 			player_on_screen = false
-		# print(result.collider, result.collider.get_parent())
-	
+		
 	if player_on_screen:
 		nav.target_position = player.global_position
 	else:
 		var collider: Object = direction_ray.get_collider()
+		
 		if collider: nav.target_position = collider.global_position
 		else: rand_rotation()
+
+	var nextPathPos = nav.get_next_path_position()
 	
-	var direction : Vector3 = (nav.get_next_path_position() - global_position).normalized()
-	print(nav.get_next_path_position())
+	var direction : Vector3 = (nextPathPos - global_position).normalized()
+	
 	velocity = Vector3((direction * SPEED).x, velocity.y, (direction * SPEED).z)
 
 	if (abs(velocity.x) < 0.1 or abs(velocity.z) < 0.1) and rotate_timer < 0:
