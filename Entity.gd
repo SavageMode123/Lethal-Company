@@ -9,13 +9,14 @@ var player_on_screen: bool = false
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 var rng: RandomNumberGenerator = RandomNumberGenerator.new()
-var path_finding_index = 0
+var path_finding_index: int = 0
 
-var rotate_timer = 60
-var prev_rotation = -3
+var rotate_timer: int = 60
+var prev_rotation: int = -3
 
 @export var nav: NavigationAgent3D
 @export var direction_ray: RayCast3D
+@export var player: CharacterBody3D
 
 func _ready() -> void:
 	direction_ray.add_exception(self)
@@ -28,18 +29,25 @@ func _physics_process(delta: float) -> void:
 
 	# Movement
 	rotate_timer -= 1
+
+	var result = send_raycast(global_position, player.global_position+player.position)
+	if result:
+		if result.collider == player:
+			player_on_screen = true
+		else:
+			await get_tree().create_timer(1.0).timeout
+			player_on_screen = false
+		# print(result.collider, result.collider.get_parent())
 	
 	if player_on_screen:
-		pass
-		# nav.target_position = player_visible_event.global_position
+		nav.target_position = player.global_position
 	else:
 		var collider: Object = direction_ray.get_collider()
-		if collider: 
-			nav.target_position = collider.global_position
-		elif rotate_timer < 0:
-			rand_rotation()
-
+		if collider: nav.target_position = collider.global_position
+		else: rand_rotation()
+	
 	var direction : Vector3 = (nav.get_next_path_position() - global_position).normalized()
+	print(nav.get_next_path_position())
 	velocity = Vector3((direction * SPEED).x, velocity.y, (direction * SPEED).z)
 
 	if (abs(velocity.x) < 0.1 or abs(velocity.z) < 0.1) and rotate_timer < 0:
@@ -58,7 +66,7 @@ func rand_rotation() -> void:
 
 func send_raycast(from: Vector3i, to: Vector3i) -> Dictionary:
 	var space_state: PhysicsDirectSpaceState3D = get_world_3d().direct_space_state
-	var query: PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(from, to)
+	var query: PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(from, to, 1, [self])
 	query.collide_with_areas = true
 
 	var result: Dictionary = space_state.intersect_ray(query)

@@ -11,7 +11,7 @@ var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 var sprinting: bool = false
 var crouching: bool = false
 
-var speed: float = 4.0
+var speed: float = 5.0
 
 @export_category("Utils")
 @export var Main: Node3D
@@ -45,7 +45,7 @@ func getInteracting() -> Object:
 	interactRay.clear_exceptions()
 
 	if interacting:
-		print(interacting)
+		# print(interacting)
 		if interacting.has_meta("scrap") or interacting.name in interactablesNotIncludingScrap:
 			showInteractLabel()
 			return interacting
@@ -56,7 +56,7 @@ func getInteracting() -> Object:
 
 func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	camera.set_current(true)
+	# camera.set_current(true)
 
 func _process(_delta: float) -> void:
 	# Checking if Player is Moving
