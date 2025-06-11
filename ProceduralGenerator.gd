@@ -5,6 +5,7 @@ extends Node3D
 @export var Root: Node3D
 
 var rng: RandomNumberGenerator = RandomNumberGenerator.new()
+var chunk_pos: Array[Vector3] = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -45,18 +46,19 @@ func room_spawning(origin_chunk: Vector3) -> Array[Vector3]:
 	return connector_pos
 
 
-func spawn_hallways(chunk_pos: Array[Vector3]) -> Array[Node3D]:
+func spawn_hallways() -> Array[Node3D]:
 	var hallways: Array[Node3D] = []
-	# chunk_pos = [Vector3(4, 0, 0), Vector3(8, 0, 0), Vector3(12, 0, 0), Vector3(12, 0, 4)]
-	# Spawning Chunks
 
+	# Spawning Hallways
 	for index in range(len(chunk_pos)):
 		var object: Node3D = Hallways.get_node("V2").duplicate()
 		object.position = chunk_pos[index]
 		Root.call_deferred("add_child", object)
 		hallways.append(object)
 	
-	await get_tree().create_timer(1.0).timeout
+	await get_tree().create_timer(1.0).timeout # Waiting One Second Before Deleting Walls
+
+	# Deleting Walls of Hallways
 	for index in range(len(hallways)):
 		var object = hallways[index]
 		# Deleting Walls Based on Previous and Next Hallway Position
@@ -73,8 +75,6 @@ func spawn_hallways(chunk_pos: Array[Vector3]) -> Array[Node3D]:
 				object.get_node("Wall2").call_deferred("queue_free")
 			elif dir == Vector3.RIGHT:
 				object.get_node("Wall3").call_deferred("queue_free")
-			# else:
-			# 	print(dir)
 
 		if index + 1 != len(chunk_pos):
 			var next_pos: Vector3 = chunk_pos[index+1]
@@ -88,160 +88,61 @@ func spawn_hallways(chunk_pos: Array[Vector3]) -> Array[Node3D]:
 				object.get_node("Wall3").call_deferred("queue_free")
 			elif dir == Vector3.LEFT:
 				object.get_node("Wall2").call_deferred("queue_free")
-			# else:
-			# 	print(dir)
 			
-	# print(str(c) + " qwoieh uiqwhedui hqwiuhe")
-	# print(str(len(chunk_pos)) + " qo0weuwoqizzz")
 	return hallways
 
 
-func hallway_connector(start_pos: Vector3, end_pos: Vector3):
-	var cur_pos = start_pos
-	var hallways: Array[Node3D] = []
-	
-	var chunk_pos: Array[Vector3] = []
+func hallway_connector(start_pos: Vector3, end_pos: Vector3, should_rand_walk: bool = false):
+	var cur_pos: Vector3 = start_pos
 
-	var i: int = 0
-	while true:
-		i+=1
-		
-		if cur_pos == end_pos or i >= 100000:
-			print(i)
+	for i in range(int(end_pos.x + cur_pos.x + end_pos.z + cur_pos.z)):
+		# Ending If Hallways are Connected
+		if cur_pos == end_pos:
 			break
 
-		if i % 2 == 0:
-			# print("iqwei")
-			# print(cur_pos, "    quiwehiqwhue")
-			# var index = len(chunk_pos) - 1
-
-			chunk_pos.append_array(rand_walk(cur_pos, 1, chunk_pos))
-			# chunk_pos.remove_at(index)
-			# chunk_pos.append(cur_pos)
-			# var hallway_len: int = len(hallways)
-			# hallways.append_array(spawn_hallways(chunk_pos))
-			
-			# while len(hallways) == hallway_len:
-			# 	await get_tree().create_timer(1.0).timeout
-			
-			# while not hallways[-1].is_inside_tree():
-			# 	await get_tree().create_timer(1.0).timeout
-			cur_pos = chunk_pos[-1]
-			continue
-		
-		# print(cur_pos, "    ", end_pos)
-		
-		# cur_pos = Vector3()
-		# var lastPos = cur_pos
-		
-		# print(lastPos)
-		var endCompatiblePos
-		# (0,0,0) (12,0,12) (12,0,0)
-
-		# (12,0,0) (12,0,12) (12, 0, 12)
-		# 
-		if cur_pos.x == end_pos.x or cur_pos.z == end_pos.z:
+		var endCompatiblePos: Vector3
+		if end_pos.x == cur_pos.x or end_pos.z == cur_pos.z:
 			endCompatiblePos = end_pos
 		else:
 			endCompatiblePos = Vector3(end_pos.x, end_pos.y, cur_pos.z)
-		# print(cur_pos, "     ", endCompatiblePos)
 		var dir: Vector3 = cur_pos.direction_to(endCompatiblePos).normalized()
-		# print(dir)
-		# print(dir, "  qweoijqwoiejqwoijiosj")
-		
-		# print("EEeeeeee, ", dir)
-		# cur_pos = Vector3(cur_pos.x, cur_pos.y, cur_pos.z)
-		# print(dir)
-		var xInc: int
-		var zInc: int
-		
-		if dir == Vector3.LEFT:
-			xInc = -4
-		elif dir == Vector3.RIGHT:
-			xInc = 4
-		else:
-			xInc = 0
-		
-		if dir == Vector3.FORWARD:
-			zInc = -4
-		elif dir == Vector3.BACK:
-			zInc = 4
-		else:
-			zInc = 0
 
-		# cur_pos += Vector3(xInc, 0, zInc)
-		# i += 1
-		if cur_pos + Vector3(xInc, 0, zInc) not in chunk_pos:
+		# For Every Other Iteration do Random Walk
+		if (endCompatiblePos - cur_pos).length() > 8 and should_rand_walk:
+			rand_walk(cur_pos, 1, dir)
+			cur_pos = chunk_pos[-1]
+		elif not should_rand_walk:
+			var xInc: int = int(dir.x) * 4
+			var zInc: int = int(dir.z) * 4
+
+			if cur_pos + Vector3(xInc, 0, zInc) not in chunk_pos:
+				chunk_pos.append(cur_pos + Vector3(xInc, 0, zInc))
 			
-			# print("qowiejoqwje")
-			chunk_pos.append(cur_pos + Vector3(xInc, 0, zInc))
-		# else:
-			# print("qwoiejhqwoiehj")
-		# if dir == Vector3.FORWARD:
-		# 	chunk_pos.append(cur_pos - Vector3(0, 0, 4))
-		# elif dir == Vector3.BACK:
-		# 	chunk_pos.append(cur_pos + Vector3(0, 0, 4))
-		# elif dir == Vector3.LEFT:
-		# 	chunk_pos.append(cur_pos - Vector3(4, 0, 0))
-		# elif dir == Vector3.RIGHT:
-		# 	chunk_pos.append(cur_pos + Vector3(4, 0, 0))
-		# else:
-		# 	print(dir)
-		
-		# lastPos = chunk_pos[-1]
-			
-		# print(chunk_pos)
-		
-
-			# var hallway_len: int = len(hallways)
-		cur_pos = chunk_pos[-1]
-			# print("EEEEEEEEE ", chunk_pos)
-		# hallways.append_array(spawn_hallways(chunk_pos))
-	
-		# while not hallways[-1].is_inside_tree():
-		# 	await get_tree().create_timer(0.1).timeout
-		# await get_tree().create_timer(0.1).timeout
-	# print(chunk_pos)
-	# print(chunk_pos)
-	# for item in chunk_pos:
-	# 	print(item, "        ", chunk_pos.count(item))
-	# 	# if chunk_pos.count(item) > 1:
-	# print(chu)
-	spawn_hallways(chunk_pos)
+			cur_pos = chunk_pos[-1] # Current Position Will Always Be A Valid Chunk
 
 		
-func rand_walk(cur_pos: Vector3, iterations: int, prevChunks) -> Array[Vector3]:
-	var chunk_pos: Array[Vector3] = []
-	var last_dir: Vector3 = Vector3.FORWARD
-	# cur_pos = prevChunks[rng.randi_range(0, len(prevChunks) - 1)]
+func rand_walk(cur_pos: Vector3, iterations: int, last_dir: Vector3 = Vector3.FORWARD):
 	for i in range(iterations):
 		var directions: Array[Vector3] = [Vector3.FORWARD, Vector3.BACK, Vector3.LEFT, Vector3.RIGHT, last_dir]
 		directions.shuffle()
 		var cur_dir: Vector3 = directions.pop_front()
 
-		if cur_pos + (4 * cur_dir) in prevChunks or cur_pos + (4 * cur_dir) in chunk_pos: # Parenthesis change?
+		if cur_pos + (4 * cur_dir) in chunk_pos:
 			continue
 
-		# cur_pos += cur_dir
-
 		last_dir = cur_dir
-		
-		# print(cur_pos, "qwoehj")
 		chunk_pos.append(cur_pos + (4 * cur_dir))
-		cur_pos = cur_pos + (4 * cur_dir)
+		cur_pos = cur_pos + (4 * cur_dir)		
 
-	# print(chunk_pos, "     RANDWALk")
-	# print(chunk_pos)
-	# print(chunk_pos)
-	return chunk_pos
+func generateMap(_origin_chunk: Vector3) -> void:
+	# Spawning Hallways
+	hallway_connector(Vector3(0, 0, 8), Vector3(128, 0, 128))
+	print(rng.randi_range(0, len(chunk_pos)-1), len(chunk_pos))
+	hallway_connector(chunk_pos[rng.randi_range(0, len(chunk_pos)-1)], Vector3.ZERO, true)
+	spawn_hallways()
 
-func generateMap(origin_chunk: Vector3) -> void:
-	# var _chunk_pos: Array = hallway_spawning(origin_chunk)
-	# var chunk_pos: Array[Vector3] = await room_spawning(origin_chunk)
-	# print(chunk_pos)
-	# for index in range(0, len(chunk_pos), 2):
-	hallway_connector(Vector3(0, 0, 8), Vector3(128, 0, 12))
 
+# Sending Raycast from Point A -> Point B and Returning Result
 func send_raycast(from: Vector3, to: Vector3) -> Dictionary:
 	var space_state: PhysicsDirectSpaceState3D = get_world_3d().direct_space_state
 	var query: PhysicsRayQueryParameters3D= PhysicsRayQueryParameters3D.create(from, to, 1, [Root.get_node("Players").get_node("Player")])
