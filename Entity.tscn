@@ -6,9 +6,10 @@
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_goui1"]
 
-[node name="Entity" type="CharacterBody3D" node_paths=PackedStringArray("nav", "direction_ray")]
+[node name="Entity" type="CharacterBody3D" node_paths=PackedStringArray("nav", "lineOfSight", "direction_ray")]
 script = ExtResource("1_xh78n")
 nav = NodePath("NavigationAgent3D")
+lineOfSight = NodePath("Camera3D/LineOfSight")
 direction_ray = NodePath("Camera3D/DirectionRay")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
@@ -26,4 +27,7 @@ debug_enabled = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 0.75, -0.5)
 
 [node name="DirectionRay" type="RayCast3D" parent="Camera3D"]
+target_position = Vector3(2.08165e-12, 2.08165e-12, -10)
+
+[node name="LineOfSight" type="RayCast3D" parent="Camera3D"]
 target_position = Vector3(2.08165e-12, 2.08165e-12, -10)

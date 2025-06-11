@@ -15,10 +15,12 @@ var rotate_timer: int = 60
 var prev_rotation: int = -3
 
 @export var nav: NavigationAgent3D
+@export var lineOfSight: RayCast3D
 @export var direction_ray: RayCast3D
 @export var player: CharacterBody3D
 
 func _ready() -> void:
+	lineOfSight.add_exception(self)
 	direction_ray.add_exception(self)
 	rand_rotation()
 
@@ -29,10 +31,13 @@ func _physics_process(delta: float) -> void:
 
 	# Movement
 	rotate_timer -= 1
-
-	var result = send_raycast(global_position, player.global_position+player.position)
+	
+	lineOfSight.target_position = lineOfSight.to_local(player.global_position)
+	lineOfSight.force_raycast_update()
+	
+	var result = lineOfSight.get_collider()
 	if result:
-		if result.collider == player:
+		if result == player:
 			player_on_screen = true
 		else:
 			await get_tree().create_timer(1.0).timeout
