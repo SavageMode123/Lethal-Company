@@ -6,44 +6,44 @@ extends Node3D
 
 var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 var chunk_pos: Array[Vector3] = [Vector3.ZERO, Vector3(4, 0, 0), Vector3(-4, 0, 0), Vector3(0, 0, 4), Vector3(0, 0, -4)] # "Spawn Chunks"
+var connector_pos: Array[Vector3] = [Vector3.ZERO]
+var room_pos: Array[Vector3] = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	generateMap(Vector3(0, 0, 105))
+	generateMap(Vector3(0, 0, 0))
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
 	pass
 
 
-func room_spawning(origin_chunk: Vector3) -> Array[Vector3]:
-	var connector_pos: Array[Vector3] = []
-	var rooms: Array[Node3D] = []
+func room_spawning(origin_chunk: Vector3):
+	var directions: Array[Vector3] = [Vector3.FORWARD, Vector3.BACK, Vector3.LEFT, Vector3.RIGHT]
 
-	# First Room
-	var room = Rooms.get_node("V1").duplicate()
-	room.position = origin_chunk
-	rooms.append(room)
-	Root.call_deferred("add_child", room)
+	# Determining Room Cords 
+	for i in range(10, 111, 10):
+		var result: Vector3 = Vector3.ZERO
+		while result == Vector3.ZERO:
+			result = (origin_chunk + directions[rng.randi_range(0, 1)] + directions[rng.randi_range(2, 3)])*i*2
+		room_pos.append(result)
 
-	# Calculating Positions of Other Rooms
-	for i in range(10):
-		var base_room: Node3D = rooms[rng.randi_range(0, len(rooms)-1)]
-		var start_connector: Node3D = base_room.get_node("Connectors").get_node("Connector"+str(rng.randi_range(1, 4)))
-		
-		while not start_connector.is_inside_tree():
-			await get_tree().create_timer(1.0).timeout
-		
-		# var room_pos: Vector3 = rand_walk(start_connector.global_position, 10)[-1]
-		connector_pos.append(start_connector.global_position)
-		
-		# Spawning
-		var object: Node3D = Rooms.get_node("V1").duplicate()
-		# object.position = room_pos
-		rooms.append(object)
+	for pos in room_pos:
+		var object = Rooms.get_node("V1").duplicate()
+		object.position = pos
 		Root.call_deferred("add_child", object)
 
-	return connector_pos
+		# Connectors
+		var connector1: Node3D = object.get_node("Connectors").get_node("Connector1")
+		var connector2: Node3D = object.get_node("Connectors").get_node("Connector2")
+		var connector3: Node3D = object.get_node("Connectors").get_node("Connector3")
+		var connector4: Node3D = object.get_node("Connectors").get_node("Connector4")
+
+		while not object.is_inside_tree():
+			await get_tree().create_timer(0.1).timeout
+
+		for connector in [connector1, connector2, connector3, connector4]:
+			connector_pos.append((connector.global_position / 4).round() * 4)
 
 
 func spawn_hallways() -> Array[Node3D]:
@@ -56,11 +56,31 @@ func spawn_hallways() -> Array[Node3D]:
 		Root.call_deferred("add_child", object)
 		hallways.append(object)
 	
-	await get_tree().create_timer(1.0).timeout # Waiting One Second Before Deleting Walls
+	for hallway in hallways:
+		while not hallway.is_inside_tree():
+			await get_tree().create_timer(0.1).timeout # Waiting One Second Before Deleting Walls
 
 	# Deleting Walls of Hallways
 	for i in range(len(hallways)):
 		var object = hallways[i]
+		
+		# Deleting Walls of Hallways that Connect to Rooms
+		for pos in room_pos:
+			if (chunk_pos[i] - pos).length() != 8:
+				continue
+			
+			var dir: Vector3 = chunk_pos[i].direction_to(pos)
+			if dir == Vector3.BACK:
+				object.get_node("Wall4").call_deferred("queue_free")
+			elif dir == Vector3.FORWARD:
+				object.get_node("Wall").call_deferred("queue_free")
+			elif dir == Vector3.LEFT:
+				object.get_node("Wall3").call_deferred("queue_free")
+			elif dir == Vector3.RIGHT:
+				object.get_node("Wall2").call_deferred("queue_free")
+			break
+
+		# Regular Wall Deletion
 		for j in range(len(hallways)):
 			if (chunk_pos[i] - chunk_pos[j]).length() != 4:
 				continue
@@ -81,13 +101,13 @@ func spawn_hallways() -> Array[Node3D]:
 func hallway_connector(start_pos: Vector3, end_pos: Vector3, should_rand_walk: bool = false):
 	var cur_pos: Vector3 = start_pos
 
-	for i in range(int(end_pos.x + cur_pos.x + end_pos.z + cur_pos.z)):
+	while true:
 		# Ending If Hallways are Connected
 		if cur_pos == end_pos:
 			break
 
 		# Random Walk
-		if should_rand_walk:
+		if should_rand_walk and rng.randi_range(1, 5) != 1:
 			cur_pos = rand_walk(cur_pos, 1)
 			continue
 		
@@ -100,10 +120,20 @@ func hallway_connector(start_pos: Vector3, end_pos: Vector3, should_rand_walk: b
 		var xInc: int = int(dir.x) * 4
 		var zInc: int = int(dir.z) * 4
 
-		if cur_pos + Vector3(xInc, 0, zInc) not in chunk_pos:
-			chunk_pos.append(cur_pos + Vector3(xInc, 0, zInc))
-			
-			cur_pos = chunk_pos[-1]
+		cur_pos += Vector3(xInc, 0, zInc)
+		if cur_pos not in chunk_pos: 
+			if send_raycast(cur_pos + Vector3(0, 1, 0), cur_pos - Vector3(0, 1, 0)) != {}: 
+				if send_raycast(cur_pos + Vector3(1, 1, 0), cur_pos - Vector3(1, 1, 0)) == {}:
+					cur_pos += Vector3(1, 0, 0)
+				elif send_raycast(cur_pos + Vector3(-1, 1, 0), cur_pos - Vector3(-1, 1, 0)) == {}:
+					cur_pos += Vector3(-1, 0, 0)
+				elif send_raycast(cur_pos + Vector3(0, 1, 1), cur_pos - Vector3(0, 1, 1)) == {}:
+					cur_pos += Vector3(0, 0, 1)
+				elif send_raycast(cur_pos + Vector3(0, 1, -1), cur_pos - Vector3(0, 1, -1)) == {}:
+					cur_pos += Vector3(0, 0, -1)
+				else:
+					continue
+			chunk_pos.append(cur_pos)
 
 		
 func rand_walk(cur_pos: Vector3, iterations: int, last_dir: Vector3 = Vector3.FORWARD) -> Vector3:
@@ -112,7 +142,7 @@ func rand_walk(cur_pos: Vector3, iterations: int, last_dir: Vector3 = Vector3.FO
 		directions.shuffle()
 		var cur_dir: Vector3 = directions.pop_front()
 
-		if cur_pos + (4 * cur_dir) in chunk_pos:
+		if cur_pos + (4 * cur_dir) in chunk_pos or send_raycast(cur_pos + Vector3(0, 1, 0), cur_pos - Vector3(0, 1, 0)) != {}:
 			continue
 
 		last_dir = cur_dir
@@ -120,9 +150,15 @@ func rand_walk(cur_pos: Vector3, iterations: int, last_dir: Vector3 = Vector3.FO
 		cur_pos = cur_pos + (4 * cur_dir)
 	return cur_pos
 
-func generateMap(_origin_chunk: Vector3) -> void:
+func generateMap(origin_chunk: Vector3) -> void:
+	# Spawning Rooms
+	await room_spawning(origin_chunk)
+	chunk_pos.append_array(connector_pos)
+	connector_pos.shuffle()
+
 	# Spawning Hallways
-	hallway_connector(Vector3(0, 0, 8), Vector3(128, 0, 128))
+	for i in range(0, len(connector_pos)-1, 2):
+		await hallway_connector(connector_pos[i], connector_pos[i+1])
 
 	# Random Halways
 	var pointer: int = 5

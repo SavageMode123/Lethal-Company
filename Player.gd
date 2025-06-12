@@ -11,7 +11,7 @@ var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 var sprinting: bool = false
 var crouching: bool = false
 
-var speed: float = 4.0
+var speed: float = 8.0
 
 @export_category("Utils")
 @export var Main: Node3D
