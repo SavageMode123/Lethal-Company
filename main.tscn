@@ -1,7 +1,6 @@
-[gd_scene load_steps=56 format=3 uid="uid://cmcut6gpk4u04"]
+[gd_scene load_steps=55 format=3 uid="uid://cmcut6gpk4u04"]
 
 [ext_resource type="PackedScene" uid="uid://dwl20mfyhkdyq" path="res://player.tscn" id="1_h55wo"]
-[ext_resource type="PackedScene" uid="uid://dauhdw21ytc3e" path="res://Entity.tscn" id="2_27e5f"]
 [ext_resource type="Script" path="res://Elevator.gd" id="2_qana8"]
 [ext_resource type="Texture2D" uid="uid://blude7e8oag3j" path="res://low_poly_emergency_button/textures/Material.002_baseColor.png" id="3_m1li0"]
 [ext_resource type="Texture2D" uid="uid://g8d5s6ylm30t" path="res://low_poly_emergency_button/textures/Material.002_metallicRoughness.png" id="4_ftsml"]
@@ -306,8 +305,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 5, 2.08165e-12)
 Main = NodePath("../..")
 ScrapHandler = NodePath("../../Modules/ScrapHandler")
 mouse_sensitivity = 0.003
-
-[node name="Entity" parent="Players" instance=ExtResource("2_27e5f")]
 
 [node name="Elevator" type="Node3D" parent="." node_paths=PackedStringArray("Players")]
 transform = Transform3D(-1, 3.48787e-16, -8.74228e-08, 3.48787e-16, 1, -3.48787e-16, 8.74228e-08, -3.48787e-16, -1, 0, 0, 35.699)
