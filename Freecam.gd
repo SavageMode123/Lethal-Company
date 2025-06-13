@@ -21,7 +21,6 @@ var lookAngles = Vector2.ZERO
 var controllerLook = Vector2.ZERO
 
 
-
 func _process(delta):  
   # Rotate the camera with the controller.
   if controllerLook.length_squared() > controllerDeadZone:
@@ -38,15 +37,14 @@ func _process(delta):
   
   # Accelerate or decelerate depending on if we have a direction or not.
   if dir.length_squared() > 0:
-    velocity += dir * acceleration * delta
+   velocity += dir * acceleration * delta
   else:
-    velocity += velocity.direction_to(Vector3.ZERO) * acceleration * delta
-    
-    # Kill the velocity if we are close to zero.
-    if velocity.length() < 0.0005:
-      velocity = Vector3.ZERO
-  
-      
+   velocity += velocity.direction_to(Vector3.ZERO) * acceleration * delta
+	
+	# Kill the velocity if we are close to zero.
+  if velocity.length() < 0.0005:
+   velocity = Vector3.ZERO
+	
   # Limit the camera's top speed to the moveSpeed then move the camera.
   if velocity.length() > moveSpeed:
     velocity = velocity.normalized() * moveSpeed
@@ -61,7 +59,7 @@ func _process(delta):
 
 
 func updateDirection():
-    # Get the direction to move the camera from the input.
+	# Get the direction to move the camera from the input.
   var dir = Vector3()
   if Input.is_action_pressed("Forward"):
     dir += Vector3.FORWARD
@@ -71,7 +69,7 @@ func updateDirection():
     dir += Vector3.LEFT
   if Input.is_action_pressed("Right"):
     dir += Vector3.RIGHT
-    
+	
   return dir.normalized()
   
 
@@ -81,16 +79,7 @@ func _input(event):
   # Update the look angles when the mouse moves.
   if event is InputEventMouseMotion:
     lookAngles -= event.relative / mouseSpeed
-  
-  
-  # Update the controllerLook when any axis on the controller moves.
-#   if event is InputEventJoypadMotion:
-#     if event.axis == JOY_AXIS_2:
-#       controllerLook.x = event.axis_value
-#     if event.axis == JOY_AXIS_3:
-#       controllerLook.y = event.axis_value
-  
-      
+	
   # Steal the mouse from the player when they interact with the window using a
   # mouse button.      
   if event is InputEventMouseButton:
