@@ -1,19 +1,17 @@
 extends CharacterBody3D
 
 var speed: float = 2.5
-const JUMP_VELOCITY: float = 4.5
 const TRAILING_TIME: float = 5.0
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
-var rng: RandomNumberGenerator = RandomNumberGenerator.new()
-var path_finding_index: int = 0
 
 var rotate_timer: int = 60
 var prev_rotation: int = -3
 var trailingStartTime: float = 0
 
 @export var nav: NavigationAgent3D
+@export var animator: AnimationPlayer
 @export var lineOfSight: RayCast3D
 @export var direction_ray: RayCast3D
 @export var player: CharacterBody3D
@@ -22,10 +20,14 @@ var trailingStartTime: float = 0
 	# Idle
 	# Trailing
 	# Hunting
+	# Attacking
 var state: String = "Idle"
 var lastPlayerSeenPos
+var attackingStartTime: float = 0
+var attackingTime: float
 
 func _ready() -> void:
+	attackingTime = animator.get_animation("Kill").length
 	lineOfSight.add_exception(self)
 	direction_ray.add_exception(self)
 	rand_rotation()
@@ -42,15 +44,15 @@ func _physics_process(delta: float) -> void:
 	lineOfSight.force_raycast_update()
 	
 	var result = lineOfSight.get_collider()
-	if result:
+	if result and state != "Attacking":
 		if result == player:
 			speed = 5.0
 			state = "Hunting"
-			get_node("Model/AnimationPlayer").play("bracken_lc_brackendmx_skeleton|Hunt")
+			animator.play("Hunt")
 		else:
 			# await get_tree().create_timer(1.0).timeout
 			if state == "Hunting":
-				get_node("Model/AnimationPlayer").play("bracken_lc_brackendmx_skeleton|Hunt")
+				animator.play("Hunt")
 				speed = 5.0
 				state = "Trailing"
 				trailingStartTime = Time.get_unix_time_from_system()
@@ -59,7 +61,6 @@ func _physics_process(delta: float) -> void:
 				speed = 2.5
 			
 	if state == "Hunting" or state == "Trailing":
-		
 		nav.target_position = player.global_position
 	else:
 		var collider: Object = direction_ray.get_collider()
@@ -79,21 +80,25 @@ func _physics_process(delta: float) -> void:
 		var tween := create_tween()
 		tween.tween_property(self, "rotation", Vector3(0, lookAtRotation.y, 0), 0.1)
 		
-		# rotation.y += PI
-		
 		rotation.x = 0
 		rotation.z = 0
-	# else:
-	# 	look_at(player.global_position)
-	# 	rotation.y += PI
-	# 	rotation.x = 0
-	# 	rotation.z = 0
-	# if nav.is_target_reached() and state == "Searching":
-	# 	lastPlayerPos = null
 
 	var direction : Vector3 = (nextPathPos - global_position).normalized()
 	
 	velocity = Vector3((direction * speed).x, velocity.y, (direction * speed).z)
+	
+	# Kill
+	if state == "Hunting" and global_position.distance_to(player.global_position) < 2:
+		animator.play("Kill")
+		state = "Attacking"
+		attackingStartTime = Time.get_unix_time_from_system()
+	
+	if state == "Attacking":
+		velocity = Vector3.ZERO
+
+	if state == "Attacking" and Time.get_unix_time_from_system() - attackingStartTime > attackingTime:
+		player.damage(50)
+		state = "Idle"
 	
 	if (abs(velocity.x) < 0.1 or abs(velocity.z) < 0.1) and rotate_timer < 0 and state == "Idle":
 		rand_rotation()

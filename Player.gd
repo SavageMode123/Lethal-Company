@@ -21,12 +21,19 @@ var speed: float = 5.0
 @export var camera: Camera3D
 @export var mouse_sensitivity: float = 0.005
 
+@export_category("Stats")
+@export var max_health: float = 100.0
+@export var health: float = 100.0
+
 @onready var animation_player: AnimationPlayer = $"Employee Model/AnimationPlayer"
 @onready var interactRay: RayCast3D = $"Camera/InteractRay"
 @onready var inventory: Node3D = $"Inventory"
 
 var interactablesNotIncludingScrap: Array = ["OpenButton"]
 var objectInteractingWith: Object
+
+func damage(amount: float) -> void:
+	health = max(0, health - amount)
 
 func showInteractLabel():
 	$"UI/Interact".visible = true
@@ -67,6 +74,13 @@ func _process(_delta: float) -> void:
 	
 	var interacting: Object = getInteracting()
 	objectInteractingWith = interacting
+
+	# Health UI
+	var healthBarSize: Vector2 = Vector2($"UI/Health".size.x * (health / max_health), $"UI/Health".size.y)
+	var tween : Tween = create_tween()
+	tween.tween_property($"UI/Health/Bar", "size", healthBarSize, 0.1)
+
+	$"UI/Health/Bar".visible = !healthBarSize.x < 0.1
 
 	# if interacting and ScrapHandler.isScrap(interacting.name):
 	# 	objectInteractingWith = interacting

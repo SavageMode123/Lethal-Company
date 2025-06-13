@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://dwl20mfyhkdyq"]
+[gd_scene load_steps=11 format=3 uid="uid://dwl20mfyhkdyq"]
 
 [ext_resource type="Script" path="res://Player.gd" id="1_5c3k4"]
 [ext_resource type="Texture2D" uid="uid://87scjay620ri" path="res://gearwhite.png" id="2_mdtw5"]
@@ -20,6 +20,20 @@ corner_radius_bottom_left = 10
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_k4a7g"]
 texture = ExtResource("2_mdtw5")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uwdd3"]
+bg_color = Color(0.8, 0.294118, 0.231373, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ajaa3"]
+bg_color = Color(0.352941, 0.721569, 0.270588, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("camera")]
 script = ExtResource("1_5c3k4")
@@ -69,9 +83,9 @@ horizontal_alignment = 1
 
 [node name="Inventory" type="HBoxContainer" parent="UI"]
 layout_mode = 2
-offset_left = 376.0
+offset_left = 700.0
 offset_top = 528.0
-offset_right = 776.0
+offset_right = 1100.0
 offset_bottom = 608.0
 grow_horizontal = 2
 grow_vertical = 0
@@ -153,6 +167,25 @@ offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_k4a7g")
+
+[node name="Health" type="Panel" parent="UI"]
+layout_mode = 2
+offset_left = 41.0
+offset_top = 570.0
+offset_right = 520.0
+offset_bottom = 600.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_uwdd3")
+
+[node name="Bar" type="Panel" parent="UI/Health"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ajaa3")
 
 [node name="Inventory" type="Node3D" parent="." node_paths=PackedStringArray("UI", "viewmodel")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0554035, 1.00791, 0.0602795)
