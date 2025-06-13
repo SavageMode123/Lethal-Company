@@ -301,12 +301,11 @@ size = Vector3(1, 2.08165e-12, 2)
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_by3nm")
 
-[node name="ProceduralGenerator" type="Node3D" parent="." node_paths=PackedStringArray("Hallways", "Rooms", "Root", "Player")]
+[node name="ProceduralGenerator" type="Node3D" parent="." node_paths=PackedStringArray("Hallways", "Rooms", "Root")]
 script = ExtResource("6_x11xo")
 Hallways = NodePath("../Models/Hallways")
 Rooms = NodePath("../Models/Rooms")
 Root = NodePath("../Map")
-Player = NodePath("../Players/Player")
 
 [node name="Players" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.08165e-12, 2.08165e-12)
