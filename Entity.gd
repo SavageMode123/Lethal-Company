@@ -1,6 +1,6 @@
 extends CharacterBody3D
 
-var speed: float = 2.5
+var speed: float = 5.0
 const JUMP_VELOCITY: float = 4.5
 const TRAILING_TIME: float = 5.0
 

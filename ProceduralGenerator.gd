@@ -2,7 +2,8 @@ extends Node3D
 
 @export var Hallways: Node3D
 @export var Rooms: Node3D
-@export var Root: Node3D
+@export var Root: NavigationRegion3D
+@export var Player: CharacterBody3D
 
 var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 var chunk_pos: Array[Vector3] = [Vector3.ZERO, Vector3(4, 0, 0), Vector3(-4, 0, 0), Vector3(0, 0, 4), Vector3(0, 0, -4)] # "Spawn Chunks"
@@ -167,13 +168,14 @@ func generateMap(origin_chunk: Vector3) -> void:
 		pointer += rng.randi_range(4, 8)
 		if pointer >= len(chunk_pos): pointer -= len(chunk_pos)
 
-	spawn_hallways()
+	await spawn_hallways()
+	Root.bake_navigation_mesh(true)
 
 
 # Sending Raycast from Point A -> Point B and Returning Result
 func send_raycast(from: Vector3, to: Vector3) -> Dictionary:
 	var space_state: PhysicsDirectSpaceState3D = get_world_3d().direct_space_state
-	var query: PhysicsRayQueryParameters3D= PhysicsRayQueryParameters3D.create(from, to, 1, [Root.get_node("Players").get_node("Player")])
+	var query: PhysicsRayQueryParameters3D= PhysicsRayQueryParameters3D.create(from, to, 1, [Player])
 	query.collide_with_areas = true
 
 	var result: Dictionary = space_state.intersect_ray(query)
