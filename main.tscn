@@ -1,4 +1,4 @@
-[gd_scene load_steps=58 format=3 uid="uid://cmcut6gpk4u04"]
+[gd_scene load_steps=57 format=3 uid="uid://cmcut6gpk4u04"]
 
 [ext_resource type="PackedScene" uid="uid://dwl20mfyhkdyq" path="res://player.tscn" id="1_h55wo"]
 [ext_resource type="Script" path="res://Elevator.gd" id="2_qana8"]
@@ -7,7 +7,6 @@
 [ext_resource type="Texture2D" uid="uid://bf7y3q5plpayd" path="res://low_poly_emergency_button/textures/Material.002_normal.png" id="5_4k8ko"]
 [ext_resource type="Script" path="res://ProceduralGenerator.gd" id="6_x11xo"]
 [ext_resource type="Script" path="res://Freecam.gd" id="7_dvrum"]
-[ext_resource type="PackedScene" uid="uid://bm0km3lgsj7r3" path="res://Entity.tscn" id="7_oye4d"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_p50nl"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -316,10 +315,6 @@ Main = NodePath("../..")
 mouse_sensitivity = 0.003
 
 [node name="Entities" type="Node3D" parent="."]
-
-[node name="Entity" parent="Entities" node_paths=PackedStringArray("player") instance=ExtResource("7_oye4d")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 100, 2.08165e-12)
-player = NodePath("../../Players/Player")
 
 [node name="Freecam" type="Camera3D" parent="."]
 process_mode = 4
