@@ -11,11 +11,10 @@ var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 var sprinting: bool = false
 var crouching: bool = false
 
-var speed: float = 5.0
+var speed: float = 4.5
 
 @export_category("Utils")
 @export var Main: Node3D
-@export var ScrapHandler: Node3D
 
 @export_category("Objects")
 @export var camera: Camera3D
@@ -52,7 +51,6 @@ func getInteracting() -> Object:
 	interactRay.clear_exceptions()
 
 	if interacting:
-		# print(interacting)
 		if interacting.has_meta("scrap") or interacting.name in interactablesNotIncludingScrap:
 			showInteractLabel()
 			return interacting

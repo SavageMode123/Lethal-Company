@@ -2813,9 +2813,6 @@ mesh = SubResource("CapsuleMesh_goui1")
 skeleton = NodePath("../..")
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
-avoidance_enabled = true
-radius = 1.0
-debug_enabled = true
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 0.75, -0.5)
