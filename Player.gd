@@ -1,7 +1,7 @@
 extends CharacterBody3D
 
 # Constants
-const JUMP_VELOCITY: float = 4.5
+const JUMP_VELOCITY: float = 20
 const CROUCH_AMOUNT: float = 0.25
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
@@ -14,7 +14,7 @@ var crouching: bool = false
 var speed: float = 4.5
 
 @export_category("Utils")
-@export var Main: Node3D
+@export var Scraps: Node3D
 
 @export_category("Objects")
 @export var camera: Camera3D
@@ -40,15 +40,8 @@ func showInteractLabel():
 func hideInteractLabel():
 	$"UI/Interact".visible = false
 
-func getInteracting() -> Object:
-	for scrap in inventory.get_children():
-		interactRay.add_exception(scrap)
-	
-	for scrap in camera.get_node("Viewmodel").get_children():
-		interactRay.add_exception(scrap)
-		
+func getInteracting() -> Object:	
 	var interacting: Object = interactRay.get_collider()
-	interactRay.clear_exceptions()
 
 	if interacting:
 		if interacting.has_meta("scrap") or interacting.name in interactablesNotIncludingScrap:
@@ -57,7 +50,6 @@ func getInteracting() -> Object:
 
 	hideInteractLabel()
 	return null
-
 
 func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -79,12 +71,6 @@ func _process(_delta: float) -> void:
 	tween.tween_property($"UI/Health/Bar", "size", healthBarSize, 0.1)
 
 	$"UI/Health/Bar".visible = !healthBarSize.x < 0.1
-
-	# if interacting and ScrapHandler.isScrap(interacting.name):
-	# 	objectInteractingWith = interacting
-	
-	# elif not interacting or interacting.name not in interactablesNotIncludingScrap:
-	# 	hideInteractLabel())
 
 func _input(event) -> void:
 	# Escape Key
@@ -137,13 +123,13 @@ func _input(event) -> void:
 		if objectInteractingWith:
 			# Picking up scrap
 			if objectInteractingWith.has_meta("scrap"):
-				print(objectInteractingWith.name)
-				Main.remove_child(objectInteractingWith)
-				# camera.add_child(objectInteractingWith)
-				inventory.addScrap(objectInteractingWith)
-				
-				objectInteractingWith.position = Vector3(0.5, -0.5, 0)
-				objectInteractingWith.freeze = true
+				if !inventory.isFull():
+					Scraps.remove_child(objectInteractingWith)
+					# camera.add_child(objectInteractingWith)
+					inventory.addScrap(objectInteractingWith)
+					
+					
+					# objectInteractingWith.freeze = true
 	
 	# Dropping scrap
 	if Input.is_action_just_pressed("Drop"):
@@ -155,7 +141,8 @@ func _input(event) -> void:
 			# camera.remove_child(scrap)
 
 			inventory.removeScrap(inventory.equippedIndex)
-			Main.add_child(scrap)
+			Scraps.add_child(scrap)
+			scrap.get_node("Hitbox").disabled = false
 			scrap.visible = true
 			scrap.global_position = scrapPosition
 			scrap.freeze = false
