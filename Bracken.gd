@@ -15,24 +15,29 @@ var trailingStartTime: float = 0
 @export var lineOfSight: RayCast3D
 @export var direction_ray: RayCast3D
 @export var player: CharacterBody3D
+@export var navRegion: NavigationRegion3D
 
+var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 # States:
 	# Idle
 	# Trailing
 	# Hunting
 	# Attacking
 var state: String = "Idle"
-var lastPlayerSeenPos
 var attackingStartTime: float = 0
 var attackingTime: float
 
 func _ready() -> void:
+	add_collision_exception_with(player)
 	attackingTime = animator.get_animation("Kill").length
 	lineOfSight.add_exception(self)
 	direction_ray.add_exception(self)
 	rand_rotation()
 
 func _physics_process(delta: float) -> void:
+	if player.dead:
+		direction_ray.add_exception(player)
+		
 	# Add the gravity.
 	if not is_on_floor():
 		velocity.y -= gravity * delta
@@ -45,7 +50,7 @@ func _physics_process(delta: float) -> void:
 	
 	var result = lineOfSight.get_collider()
 	if result and state != "Attacking":
-		if result == player:
+		if result == player and not player.dead:
 			speed = 5.0
 			state = "Hunting"
 			animator.play("Hunt")
@@ -56,23 +61,24 @@ func _physics_process(delta: float) -> void:
 				speed = 5.0
 				state = "Trailing"
 				trailingStartTime = Time.get_unix_time_from_system()
-			elif state != "Trailing":	
+			elif state != "Trailing":
+				animator.play("Hunt")
 				state = "Idle"
 				speed = 2.5
-			
+	
 	if state == "Hunting" or state == "Trailing":
 		nav.target_position = player.global_position
 	else:
 		var collider: Object = direction_ray.get_collider()
 		
-		if collider: nav.target_position = collider.global_position
+		if collider: nav.target_position = direction_ray.get_collision_point()
 		else: rand_rotation()
 	
 	if Time.get_unix_time_from_system() - trailingStartTime > TRAILING_TIME and state == "Trailing":
 		state = "Idle"
 
 	var nextPathPos: Vector3 = nav.get_next_path_position()
-	if nextPathPos != global_position and state != "Idle":
+	if nextPathPos != global_position:
 		var prevRotation: Vector3 = rotation
 		look_at(nextPathPos)
 		var lookAtRotation: Vector3 = rotation
@@ -91,28 +97,30 @@ func _physics_process(delta: float) -> void:
 	if state == "Hunting" and global_position.distance_to(player.global_position) < 2:
 		animator.play("Kill")
 		state = "Attacking"
+		player.damage(100)
 		attackingStartTime = Time.get_unix_time_from_system()
 	
 	if state == "Attacking":
 		velocity = Vector3.ZERO
 
 	if state == "Attacking" and Time.get_unix_time_from_system() - attackingStartTime > attackingTime:
-		player.damage(50)
+		global_position = navRegion.navigation_mesh.get_vertices()[rng.randi_range(0, len(navRegion.navigation_mesh.get_vertices()) - 1)]
 		state = "Idle"
 	
-	if (abs(velocity.x) < 0.1 or abs(velocity.z) < 0.1) and rotate_timer < 0 and state == "Idle":
+	# print(velocity, "    ", str(rotate_timer))
+	if ((abs(velocity.x) < 0.1 and abs(velocity.z) < 0.1) or rotate_timer < 0) and state == "Idle":
 		rand_rotation()
 
 	move_and_slide()
 
 func rand_rotation() -> void:
-	var rotations = [-3, 3, -prev_rotation]
+	var rotations = [-6, 7]
 	rotations.shuffle()
 	prev_rotation = rotations[0]
 
 	var tween : Tween = create_tween().set_parallel(true)
 	tween.tween_property(self, "rotation", Vector3(rotation.x, rotation.y+prev_rotation, rotation.z), 1)
-	rotate_timer = 120
+	rotate_timer = 12
 
 func send_raycast(from: Vector3i, to: Vector3i) -> Dictionary:
 	var space_state: PhysicsDirectSpaceState3D = get_world_3d().direct_space_state
