@@ -23,6 +23,7 @@ var speed: float = 4.5
 @export_category("Stats")
 @export var max_health: float = 100.0
 @export var health: float = 100.0
+var dead: bool = false
 
 @onready var animation_player: AnimationPlayer = $"Employee Model/AnimationPlayer"
 @onready var interactRay: RayCast3D = $"Camera/InteractRay"
@@ -53,9 +54,12 @@ func getInteracting() -> Object:
 
 func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	# camera.set_current(true)
+	camera.set_current(true)
 
 func _process(_delta: float) -> void:
+	if dead:
+		return
+
 	# Checking if Player is Moving
 	if velocity != Vector3.ZERO:
 		animation_player.play("Walking")
@@ -71,8 +75,18 @@ func _process(_delta: float) -> void:
 	tween.tween_property($"UI/Health/Bar", "size", healthBarSize, 0.1)
 
 	$"UI/Health/Bar".visible = !healthBarSize.x < 0.1
+	# print()
+	if health <= 0 and dead == false:
+		dead = true
+		get_node("DeathCamera").set_current(true)
+		$"UI/Dead".visible = true
+		animation_player.stop()
+		animation_player.play("Death")
 
 func _input(event) -> void:
+	if dead:
+		return
+
 	# Escape Key
 	if Input.is_action_just_pressed("ui_cancel"):
 		if Input.get_mouse_mode() == Input.MOUSE_MODE_VISIBLE:
@@ -154,6 +168,9 @@ func _input(event) -> void:
 		camera.rotation.x = clampf(camera.rotation.x, -deg_to_rad(70), deg_to_rad(70))
 
 func _physics_process(delta: float) -> void:
+	if dead:
+		return
+
 	# Add the gravity.
 	if not is_on_floor():
 		velocity.y -= gravity * delta

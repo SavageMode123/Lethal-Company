@@ -38,9 +38,10 @@ data = PackedVector3Array(-0.5, 1, 4, 0.5, 1, 4, -0.5, -1, 4, 0.5, 1, 4, 0.5, -1
 
 [node name="Map" type="Node3D"]
 
-[node name="Bracken" parent="." node_paths=PackedStringArray("player") instance=ExtResource("1_navvb")]
+[node name="Bracken" parent="." node_paths=PackedStringArray("player", "navRegion") instance=ExtResource("1_navvb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.47443, 1.42717)
 player = NodePath("../Player")
+navRegion = NodePath("../NavigationRegion3D")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, -6.97574e-16, -1.5246e-23, -1.5246e-23, -4.37114e-08, 1, -6.97574e-16, -1, -4.37114e-08, 2.08165e-12, 10, 2.5)
