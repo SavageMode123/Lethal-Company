@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://dwl20mfyhkdyq"]
+[gd_scene load_steps=12 format=3 uid="uid://dwl20mfyhkdyq"]
 
 [ext_resource type="Script" path="res://Player.gd" id="1_5c3k4"]
 [ext_resource type="Texture2D" uid="uid://87scjay620ri" path="res://gearwhite.png" id="2_mdtw5"]
@@ -8,8 +8,29 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_ycu3w"]
 size = Vector3(0.8, 1.75, 0.75)
 
+[sub_resource type="FontFile" id="FontFile_vblhy"]
+face_index = null
+embolden = null
+transform = null
+cache/0/63/0/ascent = 0.0
+cache/0/63/0/descent = 0.0
+cache/0/63/0/underline_position = 0.0
+cache/0/63/0/underline_thickness = 0.0
+cache/0/63/0/scale = 1.0
+cache/0/63/0/kerning_overrides/63/0 = Vector2(0, 0)
+cache/0/63/0/kerning_overrides/16/0 = Vector2(0, 0)
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
+cache/0/16/0/kerning_overrides/63/0 = Vector2(0, 0)
+cache/0/16/0/kerning_overrides/16/0 = Vector2(0, 0)
+
 [sub_resource type="LabelSettings" id="LabelSettings_7dlg2"]
-font_size = 35
+font = SubResource("FontFile_vblhy")
+font_size = 63
+font_color = Color(0.298039, 0.580392, 0.537255, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x1cn4"]
 bg_color = Color(0.14902, 0.14902, 0.14902, 0.647059)
@@ -20,6 +41,20 @@ corner_radius_bottom_left = 10
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_k4a7g"]
 texture = ExtResource("2_mdtw5")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uwdd3"]
+bg_color = Color(0.8, 0.294118, 0.231373, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ajaa3"]
+bg_color = Color(0.352941, 0.721569, 0.270588, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("camera")]
 script = ExtResource("1_5c3k4")
@@ -36,7 +71,7 @@ collision_mask = 3
 [node name="Viewmodel" type="Node3D" parent="Camera"]
 
 [node name="Employee Model" parent="." instance=ExtResource("3_pn4p7")]
-transform = Transform3D(0.818022, -0.159007, -6.95044e-09, -1.2705e-23, -3.64261e-08, 0.833333, -0.159007, -0.818022, -3.57569e-08, 0, 0, 0)
+transform = Transform3D(-0.820672, 0.144707, 6.32535e-09, 0, -3.64261e-08, 0.833333, 0.144707, 0.820672, 3.58727e-08, 0, 0, 0)
 
 [node name="Hitbox" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 0.875, 2.08165e-12)
@@ -58,9 +93,10 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -72.0
-offset_top = -52.0
-offset_right = 72.0
+offset_left = -33.0
+offset_top = -90.0
+offset_right = 111.0
+offset_bottom = -38.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "Press [E]"
@@ -69,9 +105,9 @@ horizontal_alignment = 1
 
 [node name="Inventory" type="HBoxContainer" parent="UI"]
 layout_mode = 2
-offset_left = 376.0
+offset_left = 700.0
 offset_top = 528.0
-offset_right = 776.0
+offset_right = 1100.0
 offset_bottom = 608.0
 grow_horizontal = 2
 grow_vertical = 0
@@ -154,8 +190,57 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_k4a7g")
 
+[node name="Health" type="Panel" parent="UI"]
+layout_mode = 2
+offset_left = 41.0
+offset_top = 570.0
+offset_right = 520.0
+offset_bottom = 600.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_uwdd3")
+
+[node name="Bar" type="Panel" parent="UI/Health"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ajaa3")
+
+[node name="Dead" type="Panel" parent="UI"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="DeadLabel" type="Label" parent="UI/Dead"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -410.5
+offset_top = -33.5
+offset_right = 410.5
+offset_bottom = 33.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "[LIFE SUPPORT:   OFFLINE]"
+label_settings = SubResource("LabelSettings_7dlg2")
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="Inventory" type="Node3D" parent="." node_paths=PackedStringArray("UI", "viewmodel")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0554035, 1.00791, 0.0602795)
 script = ExtResource("2_o1u1a")
 UI = NodePath("../UI")
 viewmodel = NodePath("../Camera/Viewmodel")
+
+[node name="DeathCamera" type="Camera3D" parent="."]
+transform = Transform3D(-1, -8.74228e-08, -3.82137e-15, -1.5246e-23, -4.37114e-08, 1, -8.74228e-08, 1, 4.37114e-08, 0, 1.78962, -0.6506)

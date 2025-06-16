@@ -3,7 +3,7 @@ extends Node3D
 @export var Map: Node3D
 @export var Entities: Node3D
 @export var Players: Node3D
-const EntityModels = preload("res://Entity.tscn")
+const EntityModels = preload("res://Bracken.tscn")
 
 var game_time: float = 0.0
 var rng: RandomNumberGenerator = RandomNumberGenerator.new()
@@ -24,9 +24,12 @@ func _process(delta: float) -> void:
 func spawn_entity():
 	var entity = EntityModels.instantiate()
 	entity.player = Players.get_children()[rng.randi_range(0, len(Players.get_children())-1)]
+	entity.navRegion = Map
+
 	var rand_pos: Vector3 = Map.get_children()[rng.randi_range(0, len(Map.get_children())-1)].global_position
 	entity.position = rand_pos + Vector3(0, 1, 0)
 	Entities.add_child(entity)
+	
 	print("added entity")
 
 # Sending Raycast from Point A -> Point B and Returning Result
