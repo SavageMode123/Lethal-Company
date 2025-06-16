@@ -1,7 +1,7 @@
 extends CharacterBody3D
 
 # Constants
-const JUMP_VELOCITY: float = 4.5
+const JUMP_VELOCITY: float = 20
 const CROUCH_AMOUNT: float = 0.25
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
@@ -11,7 +11,7 @@ var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 var sprinting: bool = false
 var crouching: bool = false
 
-var speed: float = 4.0
+var speed: float = 4.5
 
 @export_category("Utils")
 @export var Main: Node3D
@@ -46,7 +46,7 @@ func getInteracting() -> Object:
 
 func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	camera.set_current(true)
+	# camera.set_current(true)
 
 func _process(_delta: float) -> void:
 	# Checking if Player is Moving
