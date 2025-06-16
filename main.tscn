@@ -305,22 +305,25 @@ Players = NodePath("Players")
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_by3nm")
 
-[node name="ProceduralGenerator" type="Node3D" parent="." node_paths=PackedStringArray("Hallways", "Rooms", "Root", "Player")]
+[node name="ProceduralGenerator" type="Node3D" parent="." node_paths=PackedStringArray("Hallways", "Rooms", "Scraps", "Root", "Player")]
 script = ExtResource("6_x11xo")
 Hallways = NodePath("../Models/Hallways")
 Rooms = NodePath("../Models/Rooms")
+Scraps = NodePath("../Scraps")
 Root = NodePath("../Map")
 Player = NodePath("../Players/Player")
 
 [node name="Players" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.08165e-12, 2.08165e-12)
 
-[node name="Player" parent="Players" node_paths=PackedStringArray("Main") instance=ExtResource("1_h55wo")]
+[node name="Player" parent="Players" node_paths=PackedStringArray("Scraps") instance=ExtResource("1_h55wo")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.08165e-12, 2.08165e-12)
-Main = NodePath("../..")
+Scraps = NodePath("../../Scraps")
 mouse_sensitivity = 0.003
 
 [node name="Entities" type="Node3D" parent="."]
+
+[node name="Scraps" type="Node3D" parent="."]
 
 [node name="Freecam" type="Camera3D" parent="."]
 process_mode = 4

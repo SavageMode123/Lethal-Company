@@ -14,7 +14,7 @@ var crouching: bool = false
 var speed: float = 4.5
 
 @export_category("Utils")
-@export var Main: Node3D
+@export var Scraps: Node3D
 
 @export_category("Objects")
 @export var camera: Camera3D
@@ -110,7 +110,7 @@ func _input(event) -> void:
 			# Picking up scrap
 			if objectInteractingWith.has_meta("scrap"):
 				if !inventory.isFull():
-					Main.remove_child(objectInteractingWith)
+					Scraps.remove_child(objectInteractingWith)
 					# camera.add_child(objectInteractingWith)
 					inventory.addScrap(objectInteractingWith)
 					
@@ -127,7 +127,7 @@ func _input(event) -> void:
 			# camera.remove_child(scrap)
 
 			inventory.removeScrap(inventory.equippedIndex)
-			Main.add_child(scrap)
+			Scraps.add_child(scrap)
 			scrap.get_node("Hitbox").disabled = false
 			scrap.visible = true
 			scrap.global_position = scrapPosition

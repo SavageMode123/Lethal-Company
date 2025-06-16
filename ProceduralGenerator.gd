@@ -2,9 +2,11 @@ extends Node3D
 
 @export var Hallways: Node3D
 @export var Rooms: Node3D
+@export var Scraps: Node3D
 @export var Root: NavigationRegion3D
 @export var Player: CharacterBody3D
 
+const ScrapScene: Resource = preload('res://Scraps.tscn')
 var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 var chunk_pos: Array[Vector3] = [Vector3.ZERO, Vector3(4, 0, 0), Vector3(-4, 0, 0), Vector3(0, 0, 4), Vector3(0, 0, -4)] # "Spawn Chunks"
 var connector_pos: Array[Vector3] = [Vector3.ZERO]
@@ -170,6 +172,24 @@ func generateMap(origin_chunk: Vector3) -> void:
 
 	await spawn_hallways()
 	Root.bake_navigation_mesh(true)
+
+	# Adding Scraps
+	for pos in room_pos:
+		if pos == Vector3.ZERO: continue
+		var scene: Node = ScrapScene.instantiate()
+		var rand_scrap: RigidBody3D = scene.get_children()[rng.randi_range(0, len(scene.get_children())-1)].duplicate()
+		rand_scrap.position = pos + Vector3(0, 1, 0)
+		Scraps.add_child(rand_scrap)
+
+	pointer = 5
+	for i in range(10):
+		var scene: Node = ScrapScene.instantiate()
+		var rand_scrap: RigidBody3D = scene.get_children()[rng.randi_range(0, len(scene.get_children())-1)].duplicate()
+		rand_scrap.position = chunk_pos[pointer] + Vector3(0, 1, 0)
+		Scraps.add_child(rand_scrap)
+
+		pointer += rng.randi_range(4, 8)
+		if pointer >= len(chunk_pos): pointer -= len(chunk_pos)
 
 
 # Sending Raycast from Point A -> Point B and Returning Result
