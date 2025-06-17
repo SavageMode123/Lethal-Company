@@ -12,6 +12,7 @@ var sprinting: bool = false
 var crouching: bool = false
 
 var speed: float = 4.5
+var stamina: float = 20
 
 @export_category("Utils")
 @export var Scraps: Node3D
@@ -62,20 +63,34 @@ func _process(_delta: float) -> void:
 
 	# Checking if Player is Moving
 	if velocity != Vector3.ZERO:
+		if sprinting:
+			stamina -= 0.1
+			stamina = clamp(stamina, 0, 100)
 		animation_player.play("Walking")
 	else:
 		animation_player.play("Idle")
-	
+		
+	if not sprinting:
+		stamina += 0.1
+		stamina = clamp(stamina, 0, 100)
+
 	var interacting: Object = getInteracting()
 	objectInteractingWith = interacting
 
+	var tween : Tween = create_tween()
+
 	# Health UI
 	var healthBarSize: Vector2 = Vector2($"UI/Health".size.x * (health / max_health), $"UI/Health".size.y)
-	var tween : Tween = create_tween()
 	tween.tween_property($"UI/Health/Bar", "size", healthBarSize, 0.1)
 
 	$"UI/Health/Bar".visible = !healthBarSize.x < 0.1
-	# print()
+	
+	# Stamina UI
+	var staminaBarSize: Vector2 = Vector2($"UI/Stamina".size.x * (stamina / max_health), $"UI/Stamina".size.y)
+	tween.tween_property($"UI/Stamina/Bar", "size", staminaBarSize, 0.1)
+
+	$"UI/Stamina/Bar".visible = !staminaBarSize.x < 0.1
+
 	if health <= 0 and dead == false:
 		dead = true
 		get_node("DeathCamera").set_current(true)

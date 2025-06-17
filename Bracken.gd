@@ -102,7 +102,7 @@ func _physics_process(delta: float) -> void:
 	
 	if state == "Attacking":
 		velocity = Vector3.ZERO
-
+	
 	if state == "Attacking" and Time.get_unix_time_from_system() - attackingStartTime > attackingTime:
 		global_position = navRegion.navigation_mesh.get_vertices()[rng.randi_range(0, len(navRegion.navigation_mesh.get_vertices()) - 1)]
 		state = "Idle"
