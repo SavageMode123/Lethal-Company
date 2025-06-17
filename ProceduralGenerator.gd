@@ -183,12 +183,10 @@ func generateMap(origin_chunk: Vector3) -> void:
 
 	pointer = 5
 	for i in range(10):
-		
 		var scene: Node = ScrapScene.instantiate()
 		var rand_scrap: RigidBody3D = scene.get_children()[rng.randi_range(0, len(scene.get_children())-1)].duplicate()
 		rand_scrap.position = chunk_pos[pointer] + Vector3(0, 1, 0)
 		if chunk_pos[pointer] != Vector3.ZERO: Scraps.add_child(rand_scrap)
-		print(rand_scrap.position)
 
 		pointer += rng.randi_range(4, 8)
 		if pointer >= len(chunk_pos): pointer -= len(chunk_pos)

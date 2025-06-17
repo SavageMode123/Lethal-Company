@@ -1,6 +1,6 @@
 extends CharacterBody3D
 
-var speed: float = 2.5
+var speed: float = 3.0
 const TRAILING_TIME: float = 5.0
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
@@ -14,8 +14,9 @@ var trailingStartTime: float = 0
 @export var animator: AnimationPlayer
 @export var lineOfSight: RayCast3D
 @export var direction_ray: RayCast3D
-@export var player: CharacterBody3D
+@export var Players: Node3D
 @export var navRegion: NavigationRegion3D
+@onready var players: Array[Node] = Players.get_children() # Players should be Array[CharacterBody3D] but thats too specific
 
 var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 # States:
@@ -26,17 +27,20 @@ var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 var state: String = "Idle"
 var attackingStartTime: float = 0
 var attackingTime: float
+var character: CharacterBody3D
 
 func _ready() -> void:
-	add_collision_exception_with(player)
+	for player in players:
+		add_collision_exception_with(player)
+
 	attackingTime = animator.get_animation("Kill").length
 	lineOfSight.add_exception(self)
 	direction_ray.add_exception(self)
 	rand_rotation()
 
 func _physics_process(delta: float) -> void:
-	if player.dead:
-		direction_ray.add_exception(player)
+	for player in players:
+		if player.dead: direction_ray.add_exception(player)
 		
 	# Add the gravity.
 	if not is_on_floor():
@@ -45,38 +49,48 @@ func _physics_process(delta: float) -> void:
 	# Movement
 	rotate_timer -= 1
 	
-	lineOfSight.target_position = lineOfSight.to_local(player.global_position)
-	lineOfSight.force_raycast_update()
-	
-	var result = lineOfSight.get_collider()
-	if result and state != "Attacking":
-		if result == player and not player.dead:
-			speed = 5.0
-			state = "Hunting"
+	# Determining Movement for all Players
+	for player in players:
+		# Sending Ray Cast to Player
+		lineOfSight.target_position = lineOfSight.to_local(player.global_position)
+		lineOfSight.force_raycast_update()
+
+		# Determining Bot State
+		var result = lineOfSight.get_collider()
+		if result == player and state != "Attacking":
+			if not player.dead:
+				speed = 6.0
+				state = "Hunting"
+				animator.play("Hunt")
+				
+				character = player
+				break
+		elif state == "Hunting":
 			animator.play("Hunt")
-		else:
-			# await get_tree().create_timer(1.0).timeout
-			if state == "Hunting":
-				animator.play("Hunt")
-				speed = 5.0
-				state = "Trailing"
-				trailingStartTime = Time.get_unix_time_from_system()
-			elif state != "Trailing":
-				animator.play("Hunt")
-				state = "Idle"
-				speed = 2.5
-	
+			speed = 6.0
+			state = "Trailing"
+			trailingStartTime = Time.get_unix_time_from_system()
+			break
+		elif state != "Trailing":
+			animator.play("Hunt")
+			state = "Idle"
+			speed = 3.0
+			break
+
+	# Determining Target Position
 	if state == "Hunting" or state == "Trailing":
-		nav.target_position = player.global_position
+		nav.target_position = character.global_position
 	else:
+		# Look Around Movement if Not Hunting Player
 		var collider: Object = direction_ray.get_collider()
-		
 		if collider: nav.target_position = direction_ray.get_collision_point()
 		else: rand_rotation()
 	
+	# Setting Bot to Idle After Time Limit Expires
 	if Time.get_unix_time_from_system() - trailingStartTime > TRAILING_TIME and state == "Trailing":
 		state = "Idle"
 
+	# Moving Bot to Next Path Position
 	var nextPathPos: Vector3 = nav.get_next_path_position()
 	if nextPathPos != global_position:
 		var prevRotation: Vector3 = rotation
@@ -90,24 +104,24 @@ func _physics_process(delta: float) -> void:
 		rotation.z = 0
 
 	var direction : Vector3 = (nextPathPos - global_position).normalized()
-	
 	velocity = Vector3((direction * speed).x, velocity.y, (direction * speed).z)
 	
-	# Kill
-	if state == "Hunting" and global_position.distance_to(player.global_position) < 2:
+	# Killing Player
+	if state == "Hunting" and global_position.distance_to(character.global_position) < 2:
 		animator.play("Kill")
 		state = "Attacking"
-		player.damage(100)
+		character.damage(100)
 		attackingStartTime = Time.get_unix_time_from_system()
 	
 	if state == "Attacking":
 		velocity = Vector3.ZERO
 
 	if state == "Attacking" and Time.get_unix_time_from_system() - attackingStartTime > attackingTime:
+		# Teleporting
 		global_position = navRegion.navigation_mesh.get_vertices()[rng.randi_range(0, len(navRegion.navigation_mesh.get_vertices()) - 1)]
 		state = "Idle"
 	
-	# print(velocity, "    ", str(rotate_timer))
+	# Random Movement if Bot isn't Moving
 	if ((abs(velocity.x) < 0.1 and abs(velocity.z) < 0.1) or rotate_timer < 0) and state == "Idle":
 		rand_rotation()
 
@@ -121,11 +135,3 @@ func rand_rotation() -> void:
 	var tween : Tween = create_tween().set_parallel(true)
 	tween.tween_property(self, "rotation", Vector3(rotation.x, rotation.y+prev_rotation, rotation.z), 1)
 	rotate_timer = 12
-
-func send_raycast(from: Vector3i, to: Vector3i) -> Dictionary:
-	var space_state: PhysicsDirectSpaceState3D = get_world_3d().direct_space_state
-	var query: PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(from, to, 1, [self])
-	query.collide_with_areas = true
-
-	var result: Dictionary = space_state.intersect_ray(query)
-	return result

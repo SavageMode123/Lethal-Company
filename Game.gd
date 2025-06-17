@@ -23,14 +23,14 @@ func _process(delta: float) -> void:
 
 func spawn_entity():
 	var entity = EntityModels.instantiate()
-	entity.player = Players.get_children()[rng.randi_range(0, len(Players.get_children())-1)]
+	entity.Players = Players
 	entity.navRegion = Map
 
-	var rand_pos: Vector3 = Map.get_children()[rng.randi_range(0, len(Map.get_children())-1)].global_position
-	entity.position = rand_pos + Vector3(0, 1, 0)
+	# Spawning Entity in Random Position
+	var rand_hallway: Node3D = Map.get_children()[rng.randi_range(0, len(Map.get_children())-1)]
+	while rand_hallway == Map.get_node("Elevator"): rand_hallway = Map.get_children()[rng.randi_range(0, len(Map.get_children())-1)]
+	entity.position = rand_hallway.position + Vector3(0, 1, 0)
 	Entities.add_child(entity)
-	
-	print("added entity")
 
 # Sending Raycast from Point A -> Point B and Returning Result
 func send_raycast(from: Vector3, to: Vector3) -> Dictionary:

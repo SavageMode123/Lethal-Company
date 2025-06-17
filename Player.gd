@@ -1,7 +1,7 @@
 extends CharacterBody3D
 
 # Constants
-const JUMP_VELOCITY: float = 20
+const JUMP_VELOCITY: float = 5.0
 const CROUCH_AMOUNT: float = 0.25
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
@@ -11,7 +11,7 @@ var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 var sprinting: bool = false
 var crouching: bool = false
 
-var speed: float = 4.5
+var speed: float = 4.0
 
 @export_category("Utils")
 @export var Scraps: Node3D
@@ -115,7 +115,7 @@ func _input(event) -> void:
 	if Input.is_action_just_pressed("Crouch") and not crouching:
 		var tween : Tween = create_tween().set_parallel(true)
 		crouching = true
-		speed *= 0.75
+		speed = 4.0
 
 		tween.set_ease(Tween.EASE_IN_OUT)
 		tween.set_trans(Tween.TRANS_SINE)
@@ -125,13 +125,13 @@ func _input(event) -> void:
 	elif Input.is_action_just_pressed("Crouch") and crouching:
 		var tween : Tween = create_tween().set_parallel(true)
 		crouching = false
-		speed = 5
+		speed = 4.0
 
 		tween.set_ease(Tween.EASE_IN_OUT)
 		tween.set_trans(Tween.TRANS_SINE)
 		tween.tween_property(self, "position", Vector3(position.x, position.y+CROUCH_AMOUNT, position.z), 0.4)
 		tween.tween_property(self, "scale", Vector3(scale.x, scale.y+CROUCH_AMOUNT, scale.z), 0.1)
-	
+
 	# Interactions
 	if Input.is_action_just_pressed("Interact"):
 		if objectInteractingWith:
