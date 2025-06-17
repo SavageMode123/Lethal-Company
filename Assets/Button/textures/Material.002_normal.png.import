@@ -1,0 +1,35 @@
+[remap]
+
+importer="texture"
+type="CompressedTexture2D"
+uid="uid://bf7y3q5plpayd"
+path.etc2="res://.godot/imported/Material.002_normal.png-675ac4d4d665f55f8b185f7fcf2ec8c6.etc2.ctex"
+metadata={
+"imported_formats": ["etc2_astc"],
+"vram_texture": true
+}
+
+[deps]
+
+source_file="res://Assets/Button/textures/Material.002_normal.png"
+dest_files=["res://.godot/imported/Material.002_normal.png-675ac4d4d665f55f8b185f7fcf2ec8c6.etc2.ctex"]
+
+[params]
+
+compress/mode=2
+compress/high_quality=false
+compress/lossy_quality=0.7
+compress/hdr_compression=1
+compress/normal_map=1
+compress/channel_pack=0
+mipmaps/generate=true
+mipmaps/limit=-1
+roughness/mode=1
+roughness/src_normal="res://low_poly_emergency_button/textures/Material.002_normal.png"
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/normal_map_invert_y=false
+process/hdr_as_srgb=false
+process/hdr_clamp_exposure=false
+process/size_limit=0
+detect_3d/compress_to=0
