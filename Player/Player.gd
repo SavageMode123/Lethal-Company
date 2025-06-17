@@ -12,7 +12,7 @@ var sprinting: bool = false
 var crouching: bool = false
 
 var speed: float = 4.0
-var stamina: float = 20
+var stamina: float = 100
 
 @export_category("Utils")
 @export var Scraps: Node3D
