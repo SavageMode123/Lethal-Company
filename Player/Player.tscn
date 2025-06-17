@@ -60,6 +60,7 @@ corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("camera")]
+collision_priority = 999999.0
 script = ExtResource("1_5c3k4")
 camera = NodePath("Camera")
 
