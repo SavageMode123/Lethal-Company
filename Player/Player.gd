@@ -64,7 +64,7 @@ func _process(_delta: float) -> void:
 	# Checking if Player is Moving
 	if velocity != Vector3.ZERO:
 		if sprinting:
-			stamina -= 0.1
+			stamina -= 0.2
 			stamina = clamp(stamina, 0, 100)
 		animation_player.play("Walking")
 	else:
@@ -110,18 +110,18 @@ func _input(event) -> void:
 				Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
 	# Sprinting
-	if Input.is_action_just_pressed("Sprint"):
+	if Input.is_action_just_pressed("Sprint") and stamina > 0.1:
 		var tween : Tween = create_tween().set_parallel(true)
 		sprinting = true
 		speed *= 1.25
 
 		tween.set_ease(Tween.EASE_IN_OUT)
-		tween.tween_property(camera, "fov", 90, 0.1)
+		tween.tween_property(camera, "fov", 100, 0.1)
 
-	elif Input.is_action_just_released("Sprint"):
+	elif Input.is_action_just_released("Sprint") or stamina <= 0.1:
 		var tween : Tween = create_tween().set_parallel(true)
 		sprinting = false
-		speed /= 1.25
+		speed = 4.0
 
 		tween.set_ease(Tween.EASE_IN_OUT)
 		tween.tween_property(camera, "fov", 75, 0.1)
@@ -130,7 +130,7 @@ func _input(event) -> void:
 	if Input.is_action_just_pressed("Crouch") and not crouching:
 		var tween : Tween = create_tween().set_parallel(true)
 		crouching = true
-		speed = 4.0
+		speed /=1.25
 
 		tween.set_ease(Tween.EASE_IN_OUT)
 		tween.set_trans(Tween.TRANS_SINE)

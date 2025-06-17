@@ -1,8 +1,8 @@
-[gd_scene load_steps=14 format=3 uid="uid://dwl20mfyhkdyq"]
+[gd_scene load_steps=14 format=3 uid="uid://27qkoidswkok"]
 
 [ext_resource type="Script" path="res://Player/Player.gd" id="1_5c3k4"]
 [ext_resource type="Texture2D" uid="uid://87scjay620ri" path="res://gearwhite.png" id="2_mdtw5"]
-[ext_resource type="PackedScene" uid="uid://c05cdv073jpda" path="res://Player/Employee.tscn" id="3_pn4p7"]
+[ext_resource type="PackedScene" uid="uid://bd0t3oink7l1f" path="res://Player/Employee.tscn" id="3_pn4p7"]
 [ext_resource type="Script" path="res://Player/Inventory.gd" id="4_7a5va"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ycu3w"]
