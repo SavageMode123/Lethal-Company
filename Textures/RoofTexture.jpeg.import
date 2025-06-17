@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://doykfwd3hei2t"
-path.etc2="res://.godot/imported/hallwaytextureactual.jpeg-5a152df56a845f51bef15037d7806307.etc2.ctex"
+uid="uid://cadqq6m1kk7sy"
+path.etc2="res://.godot/imported/RoofTexture.jpeg-f57c9c0a1b9afb6d8680b5d9fea4b0f9.etc2.ctex"
 metadata={
 "imported_formats": ["etc2_astc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://hallwaytextureactual.jpeg"
-dest_files=["res://.godot/imported/hallwaytextureactual.jpeg-5a152df56a845f51bef15037d7806307.etc2.ctex"]
+source_file="res://Textures/RoofTexture.jpeg"
+dest_files=["res://.godot/imported/RoofTexture.jpeg-f57c9c0a1b9afb6d8680b5d9fea4b0f9.etc2.ctex"]
 
 [params]
 

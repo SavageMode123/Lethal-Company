@@ -63,12 +63,16 @@ func spawn_hallways() -> Array[Node3D]:
 		while not hallway.is_inside_tree():
 			await get_tree().create_timer(0.1).timeout # Waiting One Second Before Deleting Walls
 
+	var positions = room_pos.duplicate()
+	for pos in room_pos:
+		positions.append_array([pos + Vector3(4, 0, 0), pos + Vector3(-4, 0, 0), pos + Vector3(0, 0, 4), pos + Vector3(0, 0, -4)])
+
 	# Deleting Walls of Hallways
 	for i in range(len(hallways)):
 		var object = hallways[i]
 		
 		# Deleting Walls of Hallways that Connect to Rooms
-		for pos in room_pos:
+		for pos in positions:
 			if (chunk_pos[i] - pos).length() != 8:
 				continue
 			

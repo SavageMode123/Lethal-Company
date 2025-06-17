@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://migak1dkpqaq"
-path.etc2="res://.godot/imported/floortexture.jpeg-a835708dc7259b6b868901277c50a6a2.etc2.ctex"
+uid="uid://cfrt5fwc0bfaf"
+path.etc2="res://.godot/imported/FloorTexture.jpeg-06b863c3c6aa423cc9ce2a7c7939cfcd.etc2.ctex"
 metadata={
 "imported_formats": ["etc2_astc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://floortexture.jpeg"
-dest_files=["res://.godot/imported/floortexture.jpeg-a835708dc7259b6b868901277c50a6a2.etc2.ctex"]
+source_file="res://Textures/FloorTexture.jpeg"
+dest_files=["res://.godot/imported/FloorTexture.jpeg-06b863c3c6aa423cc9ce2a7c7939cfcd.etc2.ctex"]
 
 [params]
 

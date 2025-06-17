@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dknsm6dienrcs"
-path.etc2="res://.godot/imported/HallwayTexture.jpeg-034f8e25cafec71da9f2e0574ae2d982.etc2.ctex"
+uid="uid://doykfwd3hei2t"
+path.etc2="res://.godot/imported/WallTexture.jpeg-353aa031f147ae394ae4a0e6ba6b5272.etc2.ctex"
 metadata={
 "imported_formats": ["etc2_astc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://HallwayTexture.jpeg"
-dest_files=["res://.godot/imported/HallwayTexture.jpeg-034f8e25cafec71da9f2e0574ae2d982.etc2.ctex"]
+source_file="res://Textures/WallTexture.jpeg"
+dest_files=["res://.godot/imported/WallTexture.jpeg-353aa031f147ae394ae4a0e6ba6b5272.etc2.ctex"]
 
 [params]
 
