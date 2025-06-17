@@ -1,4 +1,4 @@
-[gd_scene load_steps=58 format=3 uid="uid://up14tvyxguwe"]
+[gd_scene load_steps=57 format=3 uid="uid://up14tvyxguwe"]
 
 [ext_resource type="Script" path="res://Game.gd" id="1_sb453"]
 [ext_resource type="Script" path="res://Assets/ProceduralGenerator.gd" id="2_e1m2a"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://blude7e8oag3j" path="res://Assets/Button/textures/Material.002_baseColor.png" id="6_vl4t4"]
 [ext_resource type="Texture2D" uid="uid://g8d5s6ylm30t" path="res://Assets/Button/textures/Material.002_metallicRoughness.png" id="7_k1fyn"]
 [ext_resource type="Texture2D" uid="uid://bf7y3q5plpayd" path="res://Assets/Button/textures/Material.002_normal.png" id="8_sxex2"]
+[ext_resource type="Texture2D" uid="uid://doykfwd3hei2t" path="res://hallwaytextureactual.jpeg" id="9_7qk0o"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_p50nl"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -264,7 +265,7 @@ data = PackedVector3Array(-1.5, 0, 1.5, 1.5, 0, 1.5, -1.5, 0, 1.5, 1.5, 0, 1.5, 
 data = PackedVector3Array(0.5, 0, 0.5, -0.5, 0, 0.5, 0.5, 0, -0.5, -0.5, 0, 0.5, -0.5, 0, -0.5, 0.5, 0, -0.5)
 
 [sub_resource type="BoxMesh" id="BoxMesh_2rwfc"]
-size = Vector3(1, 2.08165e-12, 1)
+size = Vector3(1, 0.1, 1)
 
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_sq1f3"]
 data = PackedVector3Array(0.5, 0, 0.5, -0.5, 0, 0.5, 0.5, 0, -0.5, -0.5, 0, 0.5, -0.5, 0, -0.5, 0.5, 0, -0.5)
@@ -275,26 +276,26 @@ size = Vector3(1, 2.08165e-12, 1)
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_30hr4"]
 data = PackedVector3Array(0.5, 0, 1, -0.5, 0, 1, 0.5, 0, -1, -0.5, 0, 1, -0.5, 0, -1, 0.5, 0, -1)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_i7y7f"]
+albedo_texture = ExtResource("9_7qk0o")
+metallic_specular = 1.0
+backlight_enabled = true
+backlight = Color(0.576471, 0.576471, 0.576471, 1)
+uv1_scale = Vector3(1.774, 1.774, 1.774)
+uv1_offset = Vector3(2.08165e-12, 0.14, 2.08165e-12)
+
 [sub_resource type="BoxMesh" id="BoxMesh_ycm7w"]
+material = SubResource("StandardMaterial3D_i7y7f")
 size = Vector3(1, 2.08165e-12, 2)
 
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_jkkvb"]
 data = PackedVector3Array(0.5, 0, 1, -0.5, 0, 1, 0.5, 0, -1, -0.5, 0, 1, -0.5, 0, -1, 0.5, 0, -1)
 
-[sub_resource type="BoxMesh" id="BoxMesh_q16gt"]
-size = Vector3(1, 2.08165e-12, 2)
-
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_bc64e"]
 data = PackedVector3Array(0.5, 0, 1, -0.5, 0, 1, 0.5, 0, -1, -0.5, 0, 1, -0.5, 0, -1, 0.5, 0, -1)
 
-[sub_resource type="BoxMesh" id="BoxMesh_12vcv"]
-size = Vector3(1, 2.08165e-12, 2)
-
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_be3t4"]
 data = PackedVector3Array(0.5, 0, 1, -0.5, 0, 1, 0.5, 0, -1, -0.5, 0, 1, -0.5, 0, -1, 0.5, 0, -1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_ned7l"]
-size = Vector3(1, 2.08165e-12, 2)
 
 [node name="Main" type="Node3D" node_paths=PackedStringArray("Map", "Entities", "Players")]
 script = ExtResource("1_sb453")
@@ -659,7 +660,7 @@ disabled = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.08165e-12, 2.08165e-12)
 
 [node name="V2" type="Node3D" parent="Models/Hallways"]
-transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 2.08165e-12, 2.08165e-12, 2.08165e-12)
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 2.08165e-12, 15.8086, 2.08165e-12)
 
 [node name="Floor" type="StaticBody3D" parent="Models/Hallways/V2"]
 collision_layer = 3
@@ -669,7 +670,7 @@ collision_mask = 3
 shape = SubResource("ConcavePolygonShape3D_y1kjn")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Models/Hallways/V2/Floor/CollisionShape3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.08165e-12, 2.08165e-12)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 0, 2.08165e-12)
 mesh = SubResource("BoxMesh_2rwfc")
 skeleton = NodePath("../../..")
 
@@ -708,9 +709,9 @@ collision_mask = 3
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Models/Hallways/V2/Wall2"]
 shape = SubResource("ConcavePolygonShape3D_jkkvb")
 
-[node name="Wall2" type="MeshInstance3D" parent="Models/Hallways/V2/Wall2/CollisionShape3D"]
-transform = Transform3D(1, -3.55271e-15, -3.55271e-15, 0, 1, 5.72535e-23, 0, 5.72535e-23, 1, 0, 0, 0)
-mesh = SubResource("BoxMesh_q16gt")
+[node name="Wall" type="MeshInstance3D" parent="Models/Hallways/V2/Wall2/CollisionShape3D"]
+transform = Transform3D(1, -5.43177e-38, -1.57772e-30, -4.70198e-38, 1, 0, 0, -9.47312e-16, 1, 0, 0, 0)
+mesh = SubResource("BoxMesh_ycm7w")
 skeleton = NodePath("../../..")
 
 [node name="Wall3" type="StaticBody3D" parent="Models/Hallways/V2"]
@@ -721,9 +722,9 @@ collision_mask = 3
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Models/Hallways/V2/Wall3"]
 shape = SubResource("ConcavePolygonShape3D_bc64e")
 
-[node name="Wall3" type="MeshInstance3D" parent="Models/Hallways/V2/Wall3/CollisionShape3D"]
-transform = Transform3D(1, -3.55271e-15, 0, 3.55271e-15, 1, 3.55271e-15, 0, -8.35188e-23, 1, 0, 0, 0)
-mesh = SubResource("BoxMesh_12vcv")
+[node name="Wall" type="MeshInstance3D" parent="Models/Hallways/V2/Wall3/CollisionShape3D"]
+transform = Transform3D(1, -5.43177e-38, -1.57772e-30, -4.70198e-38, 1, 0, 0, -9.47312e-16, 1, 0, 0, 0)
+mesh = SubResource("BoxMesh_ycm7w")
 skeleton = NodePath("../../..")
 
 [node name="Wall4" type="StaticBody3D" parent="Models/Hallways/V2"]
@@ -734,7 +735,7 @@ collision_mask = 3
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Models/Hallways/V2/Wall4"]
 shape = SubResource("ConcavePolygonShape3D_be3t4")
 
-[node name="Wall4" type="MeshInstance3D" parent="Models/Hallways/V2/Wall4/CollisionShape3D"]
-transform = Transform3D(1, -9.00005e-15, 1.5785e-24, 3.78925e-15, 1, 1.89462e-15, 1.99238e-22, -4.50003e-15, 1, 0, 0, 0)
-mesh = SubResource("BoxMesh_ned7l")
+[node name="Wall" type="MeshInstance3D" parent="Models/Hallways/V2/Wall4/CollisionShape3D"]
+transform = Transform3D(1, -5.43177e-38, -1.57772e-30, -4.70198e-38, 1, 0, 0, -9.47312e-16, 1, 0, 0, 0)
+mesh = SubResource("BoxMesh_ycm7w")
 skeleton = NodePath("../../..")
