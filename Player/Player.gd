@@ -12,6 +12,7 @@ var sprinting: bool = false
 var crouching: bool = false
 
 var speed: float = 4.0
+var stamina: float = 20
 
 @export_category("Utils")
 @export var Scraps: Node3D
@@ -62,20 +63,34 @@ func _process(_delta: float) -> void:
 
 	# Checking if Player is Moving
 	if velocity != Vector3.ZERO:
+		if sprinting:
+			stamina -= 0.2
+			stamina = clamp(stamina, 0, 100)
 		animation_player.play("Walking")
 	else:
 		animation_player.play("Idle")
-	
+		
+	if not sprinting:
+		stamina += 0.1
+		stamina = clamp(stamina, 0, 100)
+
 	var interacting: Object = getInteracting()
 	objectInteractingWith = interacting
 
+	var tween : Tween = create_tween()
+
 	# Health UI
 	var healthBarSize: Vector2 = Vector2($"UI/Health".size.x * (health / max_health), $"UI/Health".size.y)
-	var tween : Tween = create_tween()
 	tween.tween_property($"UI/Health/Bar", "size", healthBarSize, 0.1)
 
 	$"UI/Health/Bar".visible = !healthBarSize.x < 0.1
-	# print()
+	
+	# Stamina UI
+	var staminaBarSize: Vector2 = Vector2($"UI/Stamina".size.x * (stamina / max_health), $"UI/Stamina".size.y)
+	tween.tween_property($"UI/Stamina/Bar", "size", staminaBarSize, 0.1)
+
+	$"UI/Stamina/Bar".visible = !staminaBarSize.x < 0.1
+
 	if health <= 0 and dead == false:
 		dead = true
 		get_node("DeathCamera").set_current(true)
@@ -95,18 +110,18 @@ func _input(event) -> void:
 				Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
 	# Sprinting
-	if Input.is_action_just_pressed("Sprint"):
+	if Input.is_action_just_pressed("Sprint") and stamina > 0.1:
 		var tween : Tween = create_tween().set_parallel(true)
 		sprinting = true
 		speed *= 1.25
 
 		tween.set_ease(Tween.EASE_IN_OUT)
-		tween.tween_property(camera, "fov", 90, 0.1)
+		tween.tween_property(camera, "fov", 100, 0.1)
 
-	elif Input.is_action_just_released("Sprint"):
+	elif Input.is_action_just_released("Sprint") or stamina <= 0.1:
 		var tween : Tween = create_tween().set_parallel(true)
 		sprinting = false
-		speed /= 1.25
+		speed = 4.0
 
 		tween.set_ease(Tween.EASE_IN_OUT)
 		tween.tween_property(camera, "fov", 75, 0.1)
@@ -115,7 +130,7 @@ func _input(event) -> void:
 	if Input.is_action_just_pressed("Crouch") and not crouching:
 		var tween : Tween = create_tween().set_parallel(true)
 		crouching = true
-		speed = 4.0
+		speed /=1.25
 
 		tween.set_ease(Tween.EASE_IN_OUT)
 		tween.set_trans(Tween.TRANS_SINE)

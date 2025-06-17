@@ -1,8 +1,8 @@
-[gd_scene load_steps=58 format=3 uid="uid://cmcut6gpk4u04"]
+[gd_scene load_steps=58 format=3 uid="uid://up14tvyxguwe"]
 
 [ext_resource type="Script" path="res://Game.gd" id="1_sb453"]
 [ext_resource type="Script" path="res://Assets/ProceduralGenerator.gd" id="2_e1m2a"]
-[ext_resource type="PackedScene" uid="uid://dwl20mfyhkdyq" path="res://Player/Player.tscn" id="3_ujhvt"]
+[ext_resource type="PackedScene" uid="uid://27qkoidswkok" path="res://Player/Player.tscn" id="3_ujhvt"]
 [ext_resource type="Script" path="res://Assets/Freecam.gd" id="4_fwpjm"]
 [ext_resource type="Script" path="res://Assets/Elevator.gd" id="5_w7fh7"]
 [ext_resource type="Texture2D" uid="uid://blude7e8oag3j" path="res://Assets/Button/textures/Material.002_baseColor.png" id="6_vl4t4"]
