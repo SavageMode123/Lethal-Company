@@ -3,7 +3,7 @@ extends Node3D
 @export var Map: Node3D
 @export var Entities: Node3D
 @export var Players: Node3D
-const EntityModels = preload("res://Bracken.tscn")
+const EntityModels = preload("res://Entities/Braken/Bracken.tscn")
 
 var game_time: float = 0.0
 var rng: RandomNumberGenerator = RandomNumberGenerator.new()
