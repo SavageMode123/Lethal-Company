@@ -111,12 +111,12 @@ func _input(event) -> void:
 
 	# Sprinting
 	if Input.is_action_just_pressed("Sprint") and stamina > 0.1:
-		var tween : Tween = create_tween().set_parallel(true)
-		sprinting = true
-		speed *= 1.25
-
+		var tween: Tween = create_tween().set_parallel(true)
 		tween.set_ease(Tween.EASE_IN_OUT)
 		tween.tween_property(camera, "fov", 100, 0.1)
+		
+		sprinting = true
+		speed = 8
 
 	elif Input.is_action_just_released("Sprint") or stamina <= 0.1:
 		var tween : Tween = create_tween().set_parallel(true)
@@ -125,7 +125,10 @@ func _input(event) -> void:
 
 		tween.set_ease(Tween.EASE_IN_OUT)
 		tween.tween_property(camera, "fov", 75, 0.1)
-	
+
+	if sprinting: 
+		speed = 4 + (stamina/25)
+
 	# Crouching
 	if Input.is_action_just_pressed("Crouch") and not crouching:
 		var tween : Tween = create_tween().set_parallel(true)
